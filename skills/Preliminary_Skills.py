@@ -11,6 +11,8 @@ class Skills:
         # lower all string in df
         df = df.astype(str)
         df = df.apply(lambda x: x.astype(str).str.lower())
+        df = df.apply(lambda x: x.astype(str).str.strip())
+
         # section off skills
         developer_skills = [word.rstrip('\n') for word in df['Developer'].dropna(axis=0)]
         bi_skills = [word.rstrip('\n') for word in df['Business_Intelligence'].dropna(axis=0)]

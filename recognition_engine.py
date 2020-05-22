@@ -1,4 +1,6 @@
 import os
+import re
+
 import textract
 from skills.Preliminary_Skills import Skills
 import pandas as pd
@@ -48,9 +50,11 @@ def skill_cv_comparison():
     for word in clean_cv:
 
         if word in dev_map:
-            dev_map[word] = dev_map.get(word) + 1
+            regex = re.compile('\\b' + word + '\\b')
+            if re.search(regex, word):
+                dev_map[word] = dev_map.get(word) + 1
 
     return dev_map
 
 
-(skill_cv_comparison())
+#print(skill_cv_comparison())
