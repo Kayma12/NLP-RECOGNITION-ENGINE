@@ -2,9 +2,10 @@ import os
 import re
 
 import textract
-from skills.Preliminary_Skills import Skills
+import skills.preliminary_skills as pre_skills
 import pandas as pd
 import cv_cleaning
+import read_in_files
 
 # get skills
 file_for_skills = "skills/preliminary_skills.csv"
@@ -12,12 +13,6 @@ skills_list = pd.read_csv(file_for_skills)
 
 # get local cv
 cv = "dummy_cvs/Susan Campbell CV1.docx"
-
-
-def read_in_file(file):
-    text_file_repr = textract.process(file)
-    text_file_repr = text_file_repr.decode('utf-8')
-    return text_file_repr.lower()
 
 
 # if all cv have atleast the first name of a candidate in title
@@ -38,32 +33,25 @@ def get_candidate_name(file_address):
     return df_name
 
 
-# go through cv, add values to mop then turn it into a df, then add name to column
-
-# this function should take a cv location so it process however many in the directory one at a time .. so for each cv in
-#location put it through this function
-
 def skill_cv_comparison():
-    skills_table = Skills()
-    all_skills = skills_table.get_skills(skills_list)
+    all_skills = pre_skills.get_skills(skills_list)
+
     # just dev skills
     dev_skills = all_skills[0]
-    dev_map = skills_table.list_to_dict(dev_skills)
-    clean_cv = cv_cleaning.clean_cv(read_in_file(cv))
+    dev_dict = pre_skills.list_to_dict(dev_skills)
+    clean_cv = cv_cleaning.clean_cv(read_in_files.read_in_doc_docx_file(cv))
 
     for word in clean_cv:
-
-        if word in dev_map:
+        if word in dev_dict:
             regex = re.compile('\\b' + word + '\\b')
             if re.search(regex, word):
-                dev_map[word] = dev_map.get(word) + 1
+                dev_dict[word] = dev_dict.get(word) + 1
 
-    dev_map = {key: val for key, val in dev_map.items() if val > 0}
+    dev_map = {key: val for key, val in dev_dict.items() if val > 0}
     df = pd.DataFrame([dev_map], columns=dev_map.keys())
     df_name = get_candidate_name(cv)
     df_with_name = pd.concat([df, df_name], axis=1)
-    df_with_name.set_index('Name', inplace=True, drop=True)
-
+    df_with_name.set_index('Name', inplace=True)
     return df_with_name
 
 

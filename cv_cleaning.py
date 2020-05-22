@@ -6,6 +6,7 @@ stopword = nltk.corpus.stopwords.words('english')
 
 
 def clean_cv(text):
+    text = text.lower()
     text = remove_punct(text)
     text_token = tokenize(text)
     text_no_stop = remove_stopwords(text_token)
