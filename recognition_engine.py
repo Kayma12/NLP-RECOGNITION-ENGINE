@@ -34,11 +34,14 @@ def get_candidate_name(file_address):
     first_name = name_and_cv[0]
     # can return full name
     first_and_last_name = name_and_cv[0:2]
-    df_name = pd.DataFrame({'name': [first_and_last_name[0] + " " + first_and_last_name[1]]})
+    df_name = pd.DataFrame({'Name': [first_and_last_name[0] + " " + first_and_last_name[1]]})
     return df_name
 
-print(get_candidate_name(cv))
+
 # go through cv, add values to mop then turn it into a df, then add name to column
+
+# this function should take a cv location so it process however many in the directory one at a time .. so for each cv in
+#location put it through this function
 
 def skill_cv_comparison():
     skills_table = Skills()
@@ -55,13 +58,13 @@ def skill_cv_comparison():
             if re.search(regex, word):
                 dev_map[word] = dev_map.get(word) + 1
 
+    dev_map = {key: val for key, val in dev_map.items() if val > 0}
     df = pd.DataFrame([dev_map], columns=dev_map.keys())
-    print(df)
     df_name = get_candidate_name(cv)
-    df_with_name = df.append(df_name, ignore_index=True)
-    #print(df_with_name)
+    df_with_name = pd.concat([df, df_name], axis=1)
+    df_with_name.set_index('Name', inplace=True, drop=True)
 
-    # return dev_map
+    return df_with_name
 
 
-#print(skill_cv_comparison())
+print(skill_cv_comparison())
