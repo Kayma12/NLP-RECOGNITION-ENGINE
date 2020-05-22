@@ -34,9 +34,10 @@ def get_candidate_name(file_address):
     first_name = name_and_cv[0]
     # can return full name
     first_and_last_name = name_and_cv[0:2]
-    return first_and_last_name
+    df_name = pd.DataFrame({'name': [first_and_last_name[0] + " " + first_and_last_name[1]]})
+    return df_name
 
-
+print(get_candidate_name(cv))
 # go through cv, add values to mop then turn it into a df, then add name to column
 
 def skill_cv_comparison():
@@ -54,7 +55,13 @@ def skill_cv_comparison():
             if re.search(regex, word):
                 dev_map[word] = dev_map.get(word) + 1
 
-    return dev_map
+    df = pd.DataFrame([dev_map], columns=dev_map.keys())
+    print(df)
+    df_name = get_candidate_name(cv)
+    df_with_name = df.append(df_name, ignore_index=True)
+    #print(df_with_name)
+
+    # return dev_map
 
 
 #print(skill_cv_comparison())
