@@ -1,8 +1,12 @@
 import nltk
 import string
 import re
+import read_in_files
 
 stopword = nltk.corpus.stopwords.words('english')
+
+cv = "dummy_cvs/Susan Campbell CV1.docx"
+text = read_in_files.read_in_doc_docx_file(cv)
 
 
 def clean_cv(text):
@@ -15,14 +19,31 @@ def clean_cv(text):
 
 # remove punctuation
 def remove_punct(text):
-    text_nopunct = "".join([char for char in text if char not in string.punctuation])
+    punc_keep = [')', '(', '-', '+']
+    new_punc = []
+    for punc in string.punctuation:
+        if punc in punc_keep:
+            continue
+        else:
+            new_punc.append(punc)
+
+    text_nopunct = "".join([char for char in text if char not in new_punc])
     return text_nopunct
+
+
+# print(string.punctuation) #!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+
+
+# print(remove_punct(text))
 
 
 # tokenize text
 def tokenize(text):
-    tokens = re.split('\W+', text)
+    tokens = re.split("\s+", text)  # "(['()\w]+|\.)"  \W+
     return tokens
+
+
+print(tokenize(remove_punct(text)))
 
 
 # remove stopwords
@@ -39,4 +60,3 @@ def remove_stopwords(tokenized_list):
 #    return text
 
 # text_stemmed = stemming(text_nonstop)
-
