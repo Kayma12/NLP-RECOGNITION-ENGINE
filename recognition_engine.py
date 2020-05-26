@@ -41,15 +41,11 @@ def skill_cv_comparison():
     dev_dict = pre_skills.list_to_dict(dev_skills)
     clean_cv = cv_cleaning.clean_cv(read_in_files.read_in_doc_docx_file(cv))
 
+
     for word in clean_cv:
-        if word in dev_dict:
-            for key in dev_dict.keys():
-                regex = re.compile('\\b' + re.escape(word) + '\\b')
-                if re.search(regex, word) and word.startswith(key):
-                    dev_dict[word] = dev_dict.get(word) + 1
-
-
-
+        for key in dev_dict.keys():
+            if word in dev_dict and word.startswith(key):
+                dev_dict[word] = dev_dict.get(word) + 1
 
     dev_map = {key: val for key, val in dev_dict.items() if val > 0}
     df = pd.DataFrame([dev_map], columns=dev_map.keys())
@@ -59,4 +55,4 @@ def skill_cv_comparison():
     return df_with_name
 
 
-print(skill_cv_comparison())
+# print(skill_cv_comparison())

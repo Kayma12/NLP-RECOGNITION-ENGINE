@@ -31,7 +31,7 @@ def remove_punct(text):
     return text_nopunct
 
 
-# print(string.punctuation) #!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+#print(string.punctuation) #!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
 
 
 # print(remove_punct(text))
