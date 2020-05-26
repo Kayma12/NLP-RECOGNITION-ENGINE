@@ -43,7 +43,7 @@ def tokenize(text):
     return tokens
 
 
-print(tokenize(remove_punct(text)))
+# print(tokenize(remove_punct(text)))
 
 
 # remove stopwords

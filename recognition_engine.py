@@ -43,7 +43,7 @@ def skill_cv_comparison():
 
     for word in clean_cv:
         if word in dev_dict:
-            regex = re.compile('\\b' + word + '\\b')
+            regex = re.compile('\\b' + re.escape(word) + '\\b')
             if re.search(regex, word):
                 dev_dict[word] = dev_dict.get(word) + 1
 
