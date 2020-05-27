@@ -1,18 +1,22 @@
 import os
 import re
 
-import textract
-import skills.preliminary_skills as pre_skills
 import pandas as pd
+
 import cv_cleaning
 import read_in_files
+import skills.preliminary_skills as pre_skills
 
 # get skills
 file_for_skills = "skills/preliminary_skills.csv"
 skills_list = pd.read_csv(file_for_skills)
 
 # get local cv
-cv = "dummy_cvs/Susan Campbell CV1.docx"
+cv_file_loc = "dummy_cvs/Susan Campbell CV DOC test.doc"
+cv_dir = "dummy_cvs/"
+file_ext = [".doc", ".docx"]
+
+cv_file = [os.path.join(cv_dir, file) for file in os.listdir(cv_dir) if file.endswith(tuple(file_ext))]
 
 
 # if all cv have atleast the first name of a candidate in title
@@ -33,26 +37,43 @@ def get_candidate_name(file_address):
     return df_name
 
 
-def skill_cv_comparison():
+def skill_cv_comparison(file):
     all_skills = pre_skills.get_skills(skills_list)
-
     # just dev skills
     dev_skills = all_skills[0]
     dev_dict = pre_skills.list_to_dict(dev_skills)
-    clean_cv = cv_cleaning.clean_cv(read_in_files.read_in_doc_docx_file(cv))
-
+    clean_cv = cv_cleaning.clean_cv(read_in_files.read_in_doc_docx_file(file))
 
     for word in clean_cv:
-        for key in dev_dict.keys():
-            if word in dev_dict and word.startswith(key):
-                dev_dict[word] = dev_dict.get(word) + 1
+        if word in dev_dict:
+            dev_dict[word] = dev_dict.get(word) + 1
+        if re.search(r"^\w+\d+$", word):
+            if word.isdigit():
+                continue
+            else:
+                result = ''.join([char for char in word if not char.isdigit()])
+                if result in dev_dict:
+                    dev_dict[result] = dev_dict.get(result) + 1
 
     dev_map = {key: val for key, val in dev_dict.items() if val > 0}
     df = pd.DataFrame([dev_map], columns=dev_map.keys())
-    df_name = get_candidate_name(cv)
+    df_name = get_candidate_name(file)
     df_with_name = pd.concat([df, df_name], axis=1)
     df_with_name.set_index('Name', inplace=True)
     return df_with_name
 
 
-# print(skill_cv_comparison())
+print(skill_cv_comparison(cv_file_loc).to_string())
+
+# Final dataframe with more than one cvs
+# final_candidates_db = pd.DataFrame()
+# index = 0
+# while index < len(cv_file):
+#     a_cv_file = cv_file[index]
+#     cv_data = skill_cv_comparison(a_cv_file)
+#     final_candidates_db = pd.concat([final_candidates_db,cv_data])
+#     final_candidates_db = final_candidates_db.fillna(0).astype(int)
+#     index += 1
+
+
+# print(final_candidates_db)
