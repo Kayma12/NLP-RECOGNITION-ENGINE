@@ -13,6 +13,7 @@ def get_skills(df):
     ba_skills = [word.rstrip('\n') for word in df['Business_Analyst'].dropna(axis=0)]
     tester_skills = [word.rstrip('\n') for word in df['Tester'].dropna(axis=0)]
 
+
     return [developer_skills, bi_skills, ba_skills, tester_skills]
 
 
