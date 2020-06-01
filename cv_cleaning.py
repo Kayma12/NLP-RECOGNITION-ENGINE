@@ -14,8 +14,8 @@ def clean_cv(text):
     text = text.lower()
     text = remove_punct(text)
     text_token = tokenize(text)
-    # sent_tok = senetnce_tokenize(text)
-    text_no_stop = remove_stopwords(text_token)
+    sent_tok = senetnce_tokenize(text)
+    text_no_stop = remove_stopwords(sent_tok)
     return text_no_stop
 
 

@@ -42,25 +42,23 @@ def get_candidate_name(file_address):
 def skill_cv_comparison(file):
     all_skills = pre_skills.get_skills(skills_list)
     # just dev skills
-    dev_skills = all_skills[0]
+    dev_skills = all_skills[2]
     # dev_skills = ['python']
     dev_dict = pre_skills.list_to_dict(dev_skills)
     clean_cv = cv_cleaning.clean_cv(read_in_files.read_in_doc_docx_file(file))
 
-    # for word in clean_cv:
-    #     if word in dev_dict:
-    #         dev_dict[word] = dev_dict.get(word) + 1
-    #     if re.search(r"^\w+\d+$", word):
-    #         if word.isdigit():
-    #             continue
-    #         else:
-    #             result = ''.join([char for char in word if not char.isdigit()])
-    #             if result in dev_dict:
-    #                 dev_dict[result] = dev_dict.get(result) + 1
-
-    for word in clean_cv:
-        if word in dev_dict:
-            dev_dict[word] = dev_dict.get(word) + 1
+    for key in dev_dict.keys():
+        clean_cv_str = ''.join(clean_cv)
+        if ' ' in key:
+            find_key = re.findall('%s' % key, clean_cv_str)
+            count_amount_of_key = len(find_key)
+            dev_dict[key] = count_amount_of_key
+        else:
+            num = clean_cv_str.split().count(key)
+            dev_dict[key] = num
+    clean_cv_str = ''.join(clean_cv)
+    clean_cv_version = re.split("\s+", clean_cv_str)
+    for word in clean_cv_version:
         if re.search(r"^\w+\d+$", word):
             if word.isdigit():
                 continue
@@ -89,7 +87,7 @@ while index < len(cv_file):
     final_candidates_df = final_candidates_df.fillna(0).astype(int)
     index += 1
 
-# print(final_candidates_db.to_string())
+print(final_candidates_df.to_string())
 
 # df to csv
 # final_candidates_db.to_csv(r'/Users/kaykay/Downloads/list_of_candidates.csv')
