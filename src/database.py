@@ -22,3 +22,16 @@ def add_consultant():
         }
     })
     print("user added successfully !!!")
+
+def add_skills():
+    skills = mdb.skills.insert_many([
+        {"stream": "Developer", "skills": ["java", "python", "javascript", "css", "html"]},
+        {"stream": "Tester", "skills": ["mockito", "tester", "test", "junit", "test develpment"]},
+        {"stream": "BA", "skills": ["project management", "agile", "excel", "risk analysis", "process modelling"]},
+        {"stream": "BI", "skills": ["tableau", "power bi", "qlik", "sql", "hadoop"]}
+    ])
+
+# Retrieve strem skills from db
+def get_skills(stream):
+    document = mdb.skills.find_one({"stream": stream})
+    return document.get('skills')
