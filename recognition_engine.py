@@ -42,7 +42,7 @@ def get_candidate_name(file_address):
 def skill_cv_comparison(file):
     all_skills = pre_skills.get_skills(skills_list)
     # just dev skills
-    dev_skills = all_skills[2]
+    dev_skills = all_skills[1]
     # dev_skills = ['python']
     dev_dict = pre_skills.list_to_dict(dev_skills)
     clean_cv = cv_cleaning.clean_cv(read_in_files.read_in_doc_docx_file(file))
