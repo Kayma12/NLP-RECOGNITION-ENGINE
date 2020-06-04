@@ -8,4 +8,4 @@ app.secret_key = "secretkey"
 app.register_blueprint(module_a)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)
