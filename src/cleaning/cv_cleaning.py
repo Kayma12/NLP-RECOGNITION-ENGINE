@@ -1,13 +1,13 @@
 import nltk
 import string
 import re
-import read_in_files
+from cleaning import read_in_files
 from nltk.tokenize import sent_tokenize
 
 stopword = nltk.corpus.stopwords.words('english')
 
-cv = "dummy_cvs/Susan Campbell CV1.docx"
-text = read_in_files.read_in_doc_docx_file(cv)
+# cv = "dummy_cvs/Susan Campbell CV1.docx"
+# text = read_in_files.read_in_doc_docx_file(cv)
 
 
 def clean_cv(text):

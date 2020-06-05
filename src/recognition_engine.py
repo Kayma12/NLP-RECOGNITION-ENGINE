@@ -1,21 +1,20 @@
 import os
+import pickle
 import re
-
 import pandas as pd
 
-import cv_cleaning
-import read_in_files
-import skills.preliminary_skills as pre_skills
+from cleaning import cv_cleaning, read_in_files
+from skills import preliminary_skills as pre_skills
 
 # get skills
-file_for_skills = "skills/preliminary_skills.csv"
+file_for_skills = "src/skills/preliminary_skills.csv"
 skills_list = pd.read_csv(file_for_skills)
 
 # get local cv
 # cv_file_loc = "dummy_cvs/Susan Campbell CV DOC test.doc"
 
-#get cv from directory
-cv_dir = "dummy_cvs/"
+# get cv from directory
+cv_dir = "src/dummy_cvs/"
 file_ext = [".doc", ".docx"]
 
 cv_file = [os.path.join(cv_dir, file) for file in os.listdir(cv_dir) if file.endswith(tuple(file_ext))]
@@ -31,11 +30,14 @@ def get_candidate_name(file_address):
     filename = os.path.basename(file_address)  # Susan Campbell CV1.docx
     before_period = os.path.splitext(filename)[0]
     name_and_cv = before_period.split(" ")
+
     # can return first name
     first_name = name_and_cv[0]
-    # can return full name
-    first_and_last_name = name_and_cv[0:2]
-    df_name = pd.DataFrame({'Name': [first_and_last_name[0] + " " + first_and_last_name[1]]})
+
+    # seperating last name because some may contain info on the type of cv
+    last_name_cv_detail = "".join((char if char.isalpha() else " ") for char in name_and_cv[1]).split()
+    last_name = last_name_cv_detail[0]
+    df_name = pd.DataFrame({'Name': [first_name + " " + last_name]})
     return df_name
 
 
@@ -87,7 +89,16 @@ while index < len(cv_file):
     final_candidates_df = final_candidates_df.fillna(0).astype(int)
     index += 1
 
-print(final_candidates_df.to_string())
+# print(final_candidates_df.to_string())
+# print(final_candidates_df.index)
+
+# this will create a file called candidates_df that will store the data frame
+with open('src/candidates_df', 'wb') as fh:  # notice that you need the 'wb' for the dump
+    pickle.dump(final_candidates_df, fh)
+
+# dump preliminary skills
+with open('src/preliminary_skills', 'wb') as fh:  # notice that you need the 'wb' for the dump
+    pickle.dump(skills_list, fh)
 
 # df to csv
 # final_candidates_db.to_csv(r'/Users/kaykay/Downloads/list_of_candidates.csv')
