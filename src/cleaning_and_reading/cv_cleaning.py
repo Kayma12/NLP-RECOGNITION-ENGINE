@@ -1,7 +1,7 @@
 import nltk
 import string
 import re
-from cleaning import read_in_files
+from cleaning_and_reading import read_in_files
 from nltk.tokenize import sent_tokenize
 
 stopword = nltk.corpus.stopwords.words('english')

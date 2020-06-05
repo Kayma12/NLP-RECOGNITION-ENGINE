@@ -1,13 +1,14 @@
+import os
 import pickle
 from database import db_consultant, db_skills
 import skills.preliminary_skills as pre_skills
 
 # get skills
-with open('src/preliminary_skills', 'rb') as fh:  # you need to use 'rb' to read
+with open(os.path.join(os.path.dirname(__file__),'preliminary_skills'), 'rb') as fh:  # you need to use 'rb' to read
     skills_list = pickle.load(fh)
 
 # to load the file do this
-with open('src/candidates_df', 'rb') as fh:  # you need to use 'rb' to read
+with open(os.path.join(os.path.dirname(__file__),'candidates_df'), 'rb') as fh:  # you need to use 'rb' to read
     df = pickle.load(fh)
 
 # print(df)

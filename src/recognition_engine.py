@@ -3,7 +3,7 @@ import pickle
 import re
 import pandas as pd
 
-from cleaning import cv_cleaning, read_in_files
+from cleaning_and_reading import cv_cleaning, read_in_files
 from skills import preliminary_skills as pre_skills
 
 # get skills
