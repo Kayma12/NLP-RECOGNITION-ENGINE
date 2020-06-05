@@ -1,6 +1,7 @@
 from flask import Flask
 from controller import blueprint as controller
 import service
+from database import mdb_client
 
 app = Flask(__name__, template_folder='./templates')
 app.secret_key = "secretkey"
@@ -16,5 +17,6 @@ def populate():
 
 
 if __name__ == '__main__':
+    mdb_client.drop_database("test_database")
     populate()
     app.run(debug=True, use_reloader=False)
