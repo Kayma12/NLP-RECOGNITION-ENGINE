@@ -43,11 +43,12 @@ def add_consultant():
 
 # adding to database
 def add_skills():
+    db_skills.delete_many( { } )
     skills = db_skills.insert_many([
         {"stream": "Developer", "skills": pre_skills.get_skills(skills_list)[0]},
-        {"stream": "Tester", "skills": ["mockito", "tester", "test", "junit", "test develpment"]},
-        {"stream": "BA", "skills": ["project management", "agile", "excel", "risk analysis", "process modelling"]},
-        {"stream": "BI", "skills": ["tableau", "power bi", "qlik", "sql", "hadoop"]}
+        {"stream": "Business_Intelligence", "skills": pre_skills.get_skills(skills_list)[1]},
+        {"stream": "Business_Analyst", "skills": pre_skills.get_skills(skills_list)[2]},
+        {"stream": "Tester", "skills": pre_skills.get_skills(skills_list)[3]}
     ])
 
 
@@ -55,5 +56,31 @@ def add_skills():
 def get_skills(stream):
     document = db_skills.find_one({"stream": stream})
     return document.get('skills')
+
+# Retrieve all skills from db
+def get_all_skills():
+    dict_skills = db_skills.find()
+    list_skills = list()
+    for x in dict_skills:
+        for y in x.get('skills'):
+            if y!='nan': list_skills.append(y)
+
+    return list_skills
+
+# Returns the consultants that have at least one skill from the list
+def query_skills(list_skills):
+    dict_skills = dict()
+    for l in list_skills:
+        dict_skills.update({"skills." + l : {"$gt": 0}})
+    query = {'$or': [  dict_skills  ] }
+    # print(query)
+    consultants_cursor = db_consultant.find(query)
+    consultants_list = list()
+    for c in consultants_cursor:
+        consultants_list.append(c)
+    return consultants_list
+
+# mydoc = query_skills(['Java','Python'])
+
 
 
