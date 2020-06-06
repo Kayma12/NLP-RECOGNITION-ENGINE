@@ -41,13 +41,48 @@ def get_candidate_name(file_address):
     return df_name
 
 
+def get_stream(file):
+    file = file.lower()
+    if "junit" and "programming languages" in file:
+        return "Development"
+    elif "etl" in file:
+        return "Business Intelligence"
+    elif "istqb" in file:
+        return "Tester"
+    elif "business fundamentals" in file:
+        return "Business Analysis"
+
+    else:
+        return ""
+
+
+text = "Hi I am from the java development stream"
+
+
+# df_stream = pd.DataFrame(columns=['Stream'])
+# df_stream['Stream'] = df_stream['Stream']=(get_stream(text))
+# print(df_stream['Stream'])
+
+# stringz = "Hi I am from the java development stream"
+# if "java development" in stringz:
+#     df_stream.loc[0] = get_stream(stringz)
+# print(df_stream)
+
+
+# cv_before_cleaning = read_in_files.read_in_doc_docx_file(file)
+# print(get_stream("Hi I am from the java development stream"))
+
+
 def skill_cv_comparison(file):
     all_skills = pre_skills.get_skills(skills_list)
     # just dev skills
-    dev_skills = all_skills[1]
+    dev_skills = all_skills[0]
     # dev_skills = ['python']
     dev_dict = pre_skills.list_to_dict(dev_skills)
-    clean_cv = cv_cleaning.clean_cv(read_in_files.read_in_doc_docx_file(file))
+
+    cv_before_cleaning = read_in_files.read_in_doc_docx_file(file)
+    # df = get_stream(cv_before_cleaning)
+    clean_cv = cv_cleaning.clean_cv(cv_before_cleaning)
 
     for key in dev_dict.keys():
         clean_cv_str = ''.join(clean_cv)
@@ -60,6 +95,7 @@ def skill_cv_comparison(file):
             dev_dict[key] = num
     clean_cv_str = ''.join(clean_cv)
     clean_cv_version = re.split("\s+", clean_cv_str)
+
     for word in clean_cv_version:
         if re.search(r"^\w+\d+$", word):
             if word.isdigit():
@@ -77,19 +113,27 @@ def skill_cv_comparison(file):
     return df_with_name
 
 
+# get skill from cv
+
 # print(skill_cv_comparison(cv_file_loc).to_string())
 
-## Final dataframe with more than one cvs
+# Final dataframe with more than one cvs
 final_candidates_df = pd.DataFrame()
+df_stream = pd.DataFrame(columns=['Stream'])
 index = 0
 while index < len(cv_file):
     a_cv_file = cv_file[index]
+    cv_before_cleaning = read_in_files.read_in_doc_docx_file(a_cv_file)
+    stream = get_stream(cv_before_cleaning.lower())
+    df_stream.loc[index] = stream
     cv_data = skill_cv_comparison(a_cv_file)
     final_candidates_df = pd.concat([final_candidates_df, cv_data])
-    final_candidates_df = final_candidates_df.fillna(0).astype(int)
     index += 1
 
-# print(final_candidates_df.to_string())
+final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candidates_df.index))
+final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
+final_candidates_df = final_candidates_df.astype(int, errors='ignore')
+
 # print(final_candidates_df.index)
 
 # this will create a file called candidates_df that will store the data frame
@@ -102,3 +146,5 @@ with open('src/preliminary_skills', 'wb') as fh:  # notice that you need the 'wb
 
 # df to csv
 # final_candidates_db.to_csv(r'/Users/kaykay/Downloads/list_of_candidates.csv')
+
+
