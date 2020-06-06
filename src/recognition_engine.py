@@ -51,27 +51,10 @@ def get_stream(file):
         return "Tester"
     elif "business fundamentals" in file:
         return "Business Analysis"
-
+    elif "prince 2" and "scrum master" in file:
+        return "PMO"
     else:
         return ""
-
-
-text = "Hi I am from the java development stream"
-
-
-# df_stream = pd.DataFrame(columns=['Stream'])
-# df_stream['Stream'] = df_stream['Stream']=(get_stream(text))
-# print(df_stream['Stream'])
-
-# stringz = "Hi I am from the java development stream"
-# if "java development" in stringz:
-#     df_stream.loc[0] = get_stream(stringz)
-# print(df_stream)
-
-
-# cv_before_cleaning = read_in_files.read_in_doc_docx_file(file)
-# print(get_stream("Hi I am from the java development stream"))
-
 
 def skill_cv_comparison(file):
     all_skills = pre_skills.get_skills(skills_list)
@@ -134,6 +117,7 @@ final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candida
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
+print(final_candidates_df.to_string())
 # print(final_candidates_df.index)
 
 # this will create a file called candidates_df that will store the data frame
