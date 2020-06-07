@@ -4,12 +4,13 @@ from database import db_consultant, db_skills
 import skills.preliminary_skills as pre_skills
 
 # get skills
-with open(os.path.join(os.path.dirname(__file__),'preliminary_skills'), 'rb') as fh:  # you need to use 'rb' to read
+with open(os.path.join(os.path.dirname(__file__), 'preliminary_skills'), 'rb') as fh:  # you need to use 'rb' to read
     skills_list = pickle.load(fh)
 
 # to load the file do this
-with open(os.path.join(os.path.dirname(__file__),'candidates_df'), 'rb') as fh:  # you need to use 'rb' to read
+with open(os.path.join(os.path.dirname(__file__), 'candidates_df'), 'rb') as fh:  # you need to use 'rb' to read
     df = pickle.load(fh)
+
 
 # print(df)
 # print(df.index)
@@ -43,7 +44,7 @@ def add_consultant():
 
 # adding to database
 def add_skills():
-    db_skills.delete_many( { } )
+    db_skills.delete_many({})
     skills = db_skills.insert_many([
         {"stream": "Developer", "skills": pre_skills.get_skills(skills_list)[0]},
         {"stream": "Business_Intelligence", "skills": pre_skills.get_skills(skills_list)[1]},
@@ -57,22 +58,24 @@ def get_skills(stream):
     document = db_skills.find_one({"stream": stream})
     return document.get('skills')
 
+
 # Retrieve all skills from db
 def get_all_skills():
     dict_skills = db_skills.find()
     list_skills = list()
     for x in dict_skills:
         for y in x.get('skills'):
-            if y!='nan': list_skills.append(y)
+            if y != 'nan': list_skills.append(y)
 
     return list_skills
+
 
 # Returns the consultants that have at least one skill from the list
 def query_skills(list_skills):
     dict_skills = dict()
     for l in list_skills:
-        dict_skills.update({"skills." + l : {"$gt": 0}})
-    query = {'$or': [  dict_skills  ] }
+        dict_skills.update({"skills." + l: {"$gt": 0}})
+    query = {'$or': [dict_skills]}
     # print(query)
     consultants_cursor = db_consultant.find(query)
     consultants_list = list()
@@ -80,7 +83,5 @@ def query_skills(list_skills):
         consultants_list.append(c)
     return consultants_list
 
-# mydoc = query_skills(['Java','Python'])
 
-
-
+mydoc = query_skills(['Java', 'Python'])
