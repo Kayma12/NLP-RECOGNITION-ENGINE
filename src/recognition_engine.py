@@ -6,17 +6,12 @@ import pandas as pd
 from cleaning_and_reading import cv_cleaning, read_in_files
 from skills import cleaning_skills as pre_skills
 from service import get_all_skills as db_skills
+from pathlib import Path
+
 
 # get skills from csv then clean them
-file_for_skills = "src/skills/preliminary_skills.csv"
+file_for_skills = Path(__file__).parent / "skills/preliminary_skills.csv"
 
-# cwd = os.getcwd()  # Get the current working directory (cwd)
-# files = os.listdir(cwd)  # Get all the files in that directory
-# print("Files in %r: %s" % (cwd, files))
-
-
-
-"src/skills/preliminary_skills.csv"
 skills_list = pd.read_csv(file_for_skills)
 skills_list = pre_skills.get_skills_from_df_to_list(skills_list)
 skills_list = pre_skills.get_list_from_list(skills_list)
