@@ -17,7 +17,7 @@ class Consultant:
     def __init__(self, first_name, last_name, stream, skills, availability = True):
         self.name = {'first_name' : first_name, 'last_name' : last_name}
         self.stream = stream
-        self.skills = skills
+        self.skills = skills  # dictionary
         self.availability = availability
 
     def __repr__(self):

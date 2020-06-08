@@ -5,7 +5,10 @@ import pandas as pd
 
 from cleaning_and_reading import cv_cleaning, read_in_files
 from skills import preliminary_skills as pre_skills
+from service import get_all_skills
 
+
+print(get_all_skills())
 # get skills
 file_for_skills = "src/skills/preliminary_skills.csv"
 skills_list = pd.read_csv(file_for_skills)
