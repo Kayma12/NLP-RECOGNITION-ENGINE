@@ -15,6 +15,10 @@ def populate():
     service.add_skills()
     service.add_consultant()
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 
 if __name__ == '__main__':
     mdb_client.drop_database("test_database")
