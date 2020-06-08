@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from controller import blueprint as controller
 import service
 from database import mdb_client
