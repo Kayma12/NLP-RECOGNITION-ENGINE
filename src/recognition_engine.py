@@ -10,7 +10,7 @@ from service import get_all_skills as db_skills
 # get skills from csv then clean them
 file_for_skills = "src/skills/preliminary_skills.csv"
 skills_list = pd.read_csv(file_for_skills)
-skills_list = pre_skills.get_skills(skills_list)
+skills_list = pre_skills.get_skills_from_df_to_list(skills_list)
 skills_list = pre_skills.get_list_from_list(skills_list)
 skills_list = pre_skills.clean_list_of_skills(skills_list)
 print(skills_list)

@@ -1,5 +1,5 @@
 # get skills
-def get_skills(df):
+def get_skills_from_df_to_list(df):
     # lower all string in df , strip space
     df = df.astype(str)
     df = df.apply(lambda x: x.astype(str).str.lower())
@@ -11,7 +11,7 @@ def get_skills(df):
     ba_skills = [word.rstrip('\n') for word in df['Business_Analyst'].dropna(axis=0)]
     tester_skills = [word.rstrip('\n') for word in df['Tester'].dropna(axis=0)]
 
-    return [developer_skills + bi_skills + ba_skills + tester_skills]
+    return [developer_skills, bi_skills, ba_skills, tester_skills]
 
 
 # dev_skills = get_skills(skills)[0] >> get dev skills example
