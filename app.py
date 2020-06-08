@@ -15,6 +15,7 @@ def populate():
     service.add_skills()
     service.add_consultant()
 
+
 # @app.route('/')
 # def index():
 #     return render_template('index.html')
