@@ -2,7 +2,7 @@ import os
 import pickle
 from database import db_consultant, db_skills
 import skills.preliminary_skills as pre_skills
-
+from model import Consultant
 # get skills
 with open(os.path.join(os.path.dirname(__file__), 'preliminary_skills'), 'rb') as fh:  # you need to use 'rb' to read
     skills_list = pickle.load(fh)
@@ -85,3 +85,12 @@ def query_skills(list_skills):
 
 
 mydoc = query_skills(['Java', 'Python'])
+
+
+"""
+        "streams": {
+            "development": True,
+            "business_analysis": False,
+            "business_intelligence": False
+        },
+"""
