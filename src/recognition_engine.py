@@ -4,17 +4,16 @@ import re
 import pandas as pd
 
 from cleaning_and_reading import cv_cleaning, read_in_files
-from skills import preliminary_skills as pre_skills
-from service import get_all_skills
+from skills import cleaning_skills as pre_skills
+from service import get_all_skills as db_skills
 
-
-print(get_all_skills())
-# get skills
+# get skills from csv then clean them
 file_for_skills = "src/skills/preliminary_skills.csv"
 skills_list = pd.read_csv(file_for_skills)
-
-# get local cv
-# cv_file_loc = "dummy_cvs/Susan Campbell CV DOC test.doc"
+skills_list = pre_skills.get_skills(skills_list)
+skills_list = pre_skills.get_list_from_list(skills_list)
+skills_list = pre_skills.clean_list_of_skills(skills_list)
+print(skills_list)
 
 # get cv from directory
 cv_dir = "src/dummy_cvs/"
@@ -59,26 +58,24 @@ def get_stream(file):
     else:
         return ""
 
+
 def skill_cv_comparison(file):
-    all_skills = pre_skills.get_skills(skills_list)
-    # just dev skills
-    dev_skills = all_skills[0]
-    # dev_skills = ['python']
-    dev_dict = pre_skills.list_to_dict(dev_skills)
+    db_skills_cleaned = pre_skills.clean_list_of_skills(db_skills())
+    skills_dict = pre_skills.list_to_dict(db_skills_cleaned)
 
     cv_before_cleaning = read_in_files.read_in_doc_docx_file(file)
     # df = get_stream(cv_before_cleaning)
     clean_cv = cv_cleaning.clean_cv(cv_before_cleaning)
 
-    for key in dev_dict.keys():
+    for key in skills_dict.keys():
         clean_cv_str = ''.join(clean_cv)
         if ' ' in key:
             find_key = re.findall('%s' % key, clean_cv_str)
             count_amount_of_key = len(find_key)
-            dev_dict[key] = count_amount_of_key
+            skills_dict[key] = count_amount_of_key
         else:
             num = clean_cv_str.split().count(key)
-            dev_dict[key] = num
+            skills_dict[key] = num
     clean_cv_str = ''.join(clean_cv)
     clean_cv_version = re.split("\s+", clean_cv_str)
 
@@ -88,10 +85,10 @@ def skill_cv_comparison(file):
                 continue
             else:
                 result = ''.join([char for char in word if not char.isdigit()])
-                if result in dev_dict:
-                    dev_dict[result] = dev_dict.get(result) + 1
+                if result in skills_dict:
+                    skills_dict[result] = skills_dict.get(result) + 1
 
-    dev_map = {key: val for key, val in dev_dict.items() if val > 0}
+    dev_map = {key: val for key, val in skills_dict.items() if val > 0}
     df = pd.DataFrame([dev_map], columns=dev_map.keys())
     df_name = get_candidate_name(file)
     df_with_name = pd.concat([df, df_name], axis=1)
@@ -120,7 +117,7 @@ final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candida
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
-print(final_candidates_df.to_string())
+# print(final_candidates_df.to_string())
 # print(final_candidates_df.index)
 
 # this will create a file called candidates_df that will store the data frame
@@ -133,5 +130,3 @@ with open('src/preliminary_skills', 'wb') as fh:  # notice that you need the 'wb
 
 # df to csv
 # final_candidates_db.to_csv(r'/Users/kaykay/Downloads/list_of_candidates.csv')
-
-

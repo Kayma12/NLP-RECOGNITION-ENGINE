@@ -1,7 +1,7 @@
 import os
 import pickle
 from database import db_consultant, db_skills
-import skills.preliminary_skills as pre_skills
+import skills.cleaning_skills as pre_skills
 from model import Consultant
 
 
@@ -49,10 +49,7 @@ def add_consultant():
 def add_skills():
     db_skills.delete_many({})
     skills = db_skills.insert_many([
-        {"stream": "Developer", "skills": pre_skills.get_skills(skills_list)[0]},
-        {"stream": "Business_Intelligence", "skills": pre_skills.get_skills(skills_list)[1]},
-        {"stream": "Business_Analyst", "skills": pre_skills.get_skills(skills_list)[2]},
-        {"stream": "Tester", "skills": pre_skills.get_skills(skills_list)[3]}
+        {"stream": "All Skills", "skills": skills_list}
     ])
 
 
