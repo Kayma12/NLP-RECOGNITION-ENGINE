@@ -9,11 +9,19 @@ from service import get_all_skills as db_skills
 
 # get skills from csv then clean them
 file_for_skills = "src/skills/preliminary_skills.csv"
+
+# cwd = os.getcwd()  # Get the current working directory (cwd)
+# files = os.listdir(cwd)  # Get all the files in that directory
+# print("Files in %r: %s" % (cwd, files))
+
+
+
+"src/skills/preliminary_skills.csv"
 skills_list = pd.read_csv(file_for_skills)
 skills_list = pre_skills.get_skills_from_df_to_list(skills_list)
 skills_list = pre_skills.get_list_from_list(skills_list)
 skills_list = pre_skills.clean_list_of_skills(skills_list)
-print(skills_list)
+#print(skills_list)
 
 # get cv from directory
 cv_dir = "src/dummy_cvs/"
@@ -117,7 +125,7 @@ final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candida
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
-# print(final_candidates_df.to_string())
+print(final_candidates_df)
 # print(final_candidates_df.index)
 
 # this will create a file called candidates_df that will store the data frame
