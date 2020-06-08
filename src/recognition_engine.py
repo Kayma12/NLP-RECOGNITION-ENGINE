@@ -2,11 +2,12 @@ import os
 import pickle
 import re
 import pandas as pd
+from pathlib import Path
 
 from cleaning_and_reading import cv_cleaning, read_in_files
 from skills import cleaning_skills as pre_skills
 from service import get_all_skills as db_skills
-from pathlib import Path
+
 
 
 # get skills from csv then clean them
