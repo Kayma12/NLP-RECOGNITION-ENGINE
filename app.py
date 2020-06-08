@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask
 from controller import blueprint as controller
 import service
 from database import mdb_client
@@ -14,10 +14,6 @@ app.register_blueprint(controller)
 def populate():
     service.add_skills()
     service.add_consultant()
-
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 
 if __name__ == '__main__':
