@@ -1,9 +1,11 @@
 import os
 import pickle
+
+from flask import Blueprint
+
 from database import db_consultant, db_skills
 import skills.cleaning_skills as pre_skills
 from model import Consultant
-
 
 
 # get skills

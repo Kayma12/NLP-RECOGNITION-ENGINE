@@ -1,7 +1,8 @@
 from flask import Flask
 from controller import blueprint as controller
-import service
+from src import service
 from database import mdb_client
+
 
 app = Flask(__name__, template_folder='./templates')
 app.secret_key = "secretkey"
