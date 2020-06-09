@@ -1,11 +1,10 @@
 import os
 import pickle
-
-from flask import Blueprint
-
+from bson.objectid import ObjectId
 from database import db_consultant, db_skills
 import skills.cleaning_skills as pre_skills
 from model import Consultant
+
 
 
 # get skills
@@ -17,7 +16,7 @@ with open(os.path.join(os.path.dirname(__file__), 'candidates_df'), 'rb') as fh:
     df = pickle.load(fh)
 
 
-# print(df)
+#print(df)
 # print(df.index)
 
 
@@ -40,14 +39,20 @@ def add_consultant():
     })
     print("user added successfully !!!")
 
+def add_consultants():
+     dict_consultant = {"name": {},"stream": {},"skills": {}}
+     for index in df.index:
+         dict_consultant['_id'] = ObjectId()
+         dict_consultant['name']['first_name'] = index.split()[0]
+         dict_consultant['name']['last_name'] = index.split()[1]
 
-# def add_consultants_from_engine():
-#     for index in df.index:
-#         print(index)
-#
-#     pass
+         for col in df.columns:
+             if (col != 'Stream'): dict_consultant['skills'][col] = int(df.loc[index,col])
+             else: dict_consultant['stream'] = df.loc[index,col]
+         db_consultant.insert_one(dict_consultant)
+         #print(dict_consultant)
 
-# adding to database
+# adding skills to database
 def add_skills():
     db_skills.delete_many({})
     skills = db_skills.insert_many([
@@ -82,12 +87,14 @@ def query_skills(list_skills):
     consultants_cursor = db_consultant.find(query)
     consultants_list = list()
     for c in consultants_cursor:
-        consultants_list.append(c)
+        cons = Consultant(c['name']['first_name'],c['name']['last_name'],c.get('stream'),c.get('skills'))
+        consultants_list.append(cons)
     return consultants_list
 
 
-mydoc = query_skills(['Java', 'Python'])
-
+#mydoc = query_skills(['java', 'python'])
+#for c in mydoc:
+#    print(c)
 
 """
         "streams": {
@@ -96,3 +103,6 @@ mydoc = query_skills(['Java', 'Python'])
             "business_intelligence": False
         },
 """
+
+#a_consultant = Consultant('Gertrude', 'Wilson', 'developer', {'Java' : 3, 'Python' : 9, 'HTML5' : 2, 'CSS3' : 2}, availability = True)
+#print(a_consultant)

@@ -14,7 +14,7 @@ app.register_blueprint(controller)
 # populate db
 def populate():
     service.add_skills()
-    service.add_consultant()
+    service.add_consultants()
 
 
 # @app.route('/')

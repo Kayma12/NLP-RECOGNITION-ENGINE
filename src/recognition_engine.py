@@ -18,7 +18,7 @@ skills_list = pre_skills.clean_list_of_skills(skills_list)
 # print(skills_list)
 
 # get cv from directory
-cv_dir = "src/dummy_cvs/"
+cv_dir = Path(__file__).parent / "dummy_cvs/"
 file_ext = [".doc", ".docx"]
 
 cv_file = [os.path.join(cv_dir, file) for file in os.listdir(cv_dir) if file.endswith(tuple(file_ext))]
@@ -125,12 +125,12 @@ final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 # print(final_candidates_df.index)
 
 # this will create a file called candidates_df that will store the data frame
-with open('src/candidates_df', 'wb') as fh:  # notice that you need the 'wb' for the dump
+with open(Path(__file__).parent / 'candidates_df', 'wb') as fh:  # notice that you need the 'wb' for the dump
     pickle.dump(final_candidates_df, fh)
 
 # dump preliminary skills
-with open('src/preliminary_skills', 'wb') as fh:  # notice that you need the 'wb' for the dump
+with open(Path(__file__).parent / 'preliminary_skills', 'wb') as fh:  # notice that you need the 'wb' for the dump
     pickle.dump(skills_list, fh)
 
 # df to csv
-final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_all_skills.csv')
+#final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_all_skills.csv')
