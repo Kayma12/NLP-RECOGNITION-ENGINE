@@ -1,6 +1,6 @@
 from flask import Flask
 from controller import blueprint as controller
-from src import service
+import service
 from database import mdb_client
 
 

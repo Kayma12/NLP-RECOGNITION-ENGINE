@@ -121,7 +121,7 @@ final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candida
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
-print(final_candidates_df['c'])
+#print(final_candidates_df['c'])
 # print(final_candidates_df.index)
 
 # this will create a file called candidates_df that will store the data frame
@@ -133,4 +133,4 @@ with open('src/preliminary_skills', 'wb') as fh:  # notice that you need the 'wb
     pickle.dump(skills_list, fh)
 
 # df to csv
-# final_candidates_db.to_csv(r'/Users/kaykay/Downloads/list_of_candidates.csv')
+final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_all_skills.csv')
