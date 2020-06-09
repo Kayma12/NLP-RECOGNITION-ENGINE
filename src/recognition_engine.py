@@ -8,8 +8,6 @@ from cleaning_and_reading import cv_cleaning, read_in_files
 from skills import cleaning_skills as pre_skills
 from service import get_all_skills as db_skills
 
-
-
 # get skills from csv then clean them
 file_for_skills = Path(__file__).parent / "skills/preliminary_skills.csv"
 
@@ -17,7 +15,7 @@ skills_list = pd.read_csv(file_for_skills)
 skills_list = pre_skills.get_skills_from_df_to_list(skills_list)
 skills_list = pre_skills.get_list_from_list(skills_list)
 skills_list = pre_skills.clean_list_of_skills(skills_list)
-#print(skills_list)
+# print(skills_list)
 
 # get cv from directory
 cv_dir = "src/dummy_cvs/"
@@ -73,12 +71,14 @@ def skill_cv_comparison(file):
 
     for key in skills_dict.keys():
         clean_cv_str = ''.join(clean_cv)
+        clean_cv_str = cv_cleaning.remove_alevel_gcse_section(clean_cv_str)
         if ' ' in key:
             find_key = re.findall('%s' % key, clean_cv_str)
             count_amount_of_key = len(find_key)
             skills_dict[key] = count_amount_of_key
         else:
             num = clean_cv_str.split().count(key)
+
             skills_dict[key] = num
     clean_cv_str = ''.join(clean_cv)
     clean_cv_version = re.split("\s+", clean_cv_str)
@@ -121,7 +121,7 @@ final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candida
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
-print(final_candidates_df)
+print(final_candidates_df['c'])
 # print(final_candidates_df.index)
 
 # this will create a file called candidates_df that will store the data frame

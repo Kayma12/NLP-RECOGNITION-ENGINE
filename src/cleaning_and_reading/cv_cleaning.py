@@ -6,6 +6,7 @@ from nltk.tokenize import sent_tokenize
 
 stopword = nltk.corpus.stopwords.words('english')
 
+
 # cv = "dummy_cvs/Susan Campbell CV1.docx"
 # text = read_in_files.read_in_doc_docx_file(cv)
 
@@ -21,7 +22,7 @@ def clean_cv(text):
 
 # remove punctuation
 def remove_punct(text):
-    punc_keep = [')', '(', '-', '+']  # (C)  c
+    punc_keep = [')', '(', '-', '+', '#']  # (C)  c
     new_punc = []
     for punc in string.punctuation:
         if punc in punc_keep:
@@ -60,6 +61,7 @@ def remove_stopwords(tokenized_list):
     text = [word for word in tokenized_list if word not in stopword]
     return text
 
+
 # stemming
 
 # ps = nltk.PorterStemmer()
@@ -69,3 +71,18 @@ def remove_stopwords(tokenized_list):
 #    return text
 
 # text_stemmed = stemming(text_nonstop)
+
+def remove_alevel_gcse_section(cv):
+    """
+    Removes the section with gcse or alevel, and it checks in case it is on another line
+    """
+    education = [x.lower() for x in ["A Level", "alevel", "A-Level", "GCSE's", "GCSEs", "gcse"]]
+    lines = [x.lower() for x in cv.splitlines()]
+    cv_text = " "
+    for i in range(len(lines)):
+        if any(e in lines[i] for e in education):
+            for num_line in range(i, i + 3):
+                lines[num_line] = " "
+        cv_text += lines[i] + " "
+
+    return cv_text
