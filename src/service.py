@@ -95,8 +95,8 @@ def query_skills(list_skills):
 
 
 mydoc = query_skills(['java', 'python'])
-for c in mydoc:
-   print(c)
+# for c in mydoc:
+#    print(c)
 
 """
         "streams": {

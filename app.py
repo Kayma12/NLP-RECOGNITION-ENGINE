@@ -2,7 +2,7 @@ from flask import Flask
 from controller import blueprint as controller
 import service
 from database import mdb_client
-
+from src import recognition_engine
 
 app = Flask(__name__, template_folder='./templates')
 app.secret_key = "secretkey"
