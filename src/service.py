@@ -94,9 +94,9 @@ def query_skills(list_skills):
     return consultants_list
 
 
-# mydoc = query_skills(['java', 'python'])
-# for c in mydoc:
-#    print(c)
+mydoc = query_skills(['java', 'python'])
+for c in mydoc:
+   print(c)
 
 """
         "streams": {
