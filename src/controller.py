@@ -10,7 +10,7 @@ def index():
         # "type >>java, python" = "choice of skills from client"
         list_items = ""
         try:
-            consultants = service.query_skills(list_items)
+            consultants = service.query_consultants_with_skills(list_items)
             return render_template('index.html', consultants=consultants)
         except:
             return "No skills were added, or no candidates met your criteria!"

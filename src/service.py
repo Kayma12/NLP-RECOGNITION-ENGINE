@@ -1,5 +1,6 @@
 import os
 import pickle
+import json
 from bson.objectid import ObjectId
 from database import db_consultant, db_skills
 import skills.cleaning_skills as pre_skills
@@ -90,20 +91,22 @@ def query_skills(list_skills):
     consultants_list = list()
     for c in consultants_cursor:
         cons = Consultant(c['name']['first_name'], c['name']['last_name'], c.get('stream'), c.get('skills'))
-        cons = filter_skills_consultant(cons, list_skills)
         consultants_list.append(cons)
     return consultants_list
 
-# Returns a list of consultants that have at least one skill from the list
+# Returns a list of consultants only with the skills from the list
 def query_consultants_with_skills(list_skills):
     query = list()
-    query.append('{ $or: [')
+    query.append('{ "$or": [')
     for l in list_skills:
-        query.append({"skills." + l: {"$gt": 0}})
+        query.append('{"skills.' + str(l) + '": {"$gt": 0}}')
+        query.append(',')
+    query.pop()
     query.append('] }')
     query2 = ''.join(query)
     print(query2)
-    consultants_cursor = db_consultant.find(query2)
+    d = json.loads(query2)
+    consultants_cursor = db_consultant.find(d)
     consultants_list = list()
     for c in consultants_cursor:
         cons = Consultant(c['name']['first_name'], c['name']['last_name'], c.get('stream'), c.get('skills'))
@@ -120,7 +123,7 @@ def filter_skills_consultant(cons, list_skills):
     cons.skills = result
     return cons
 
-mydoc = query_skills(['java', 'sql','python'])
+mydoc = query_consultants_with_skills(['java', 'sql','python'])
 for c in mydoc:
    print(c)
 
