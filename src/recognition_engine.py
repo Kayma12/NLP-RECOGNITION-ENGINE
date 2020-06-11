@@ -47,8 +47,10 @@ def get_candidate_name(file_address):
 
 def get_stream(file):
     file = file.lower()
-    if "junit" and "programming languages" in file:
+    if "java" and "mockito" in file:
         return "Development"
+    # elif "spring" and "oop" in file:
+    #     return "Development"
     elif "etl" in file:
         return "Business Intelligence"
     elif "istqb" in file:
@@ -57,6 +59,12 @@ def get_stream(file):
         return "Business Analysis"
     elif "prince 2" and "scrum master" in file:
         return "PMO"
+    elif "regulation and compliance" and "kyc" in file:
+        return "Risk Regulation & Compliance"
+    elif "completed the analysis programme" and "bcs" in file:
+        return "Analyst"
+    elif "completed the project support office" in file:
+        return "Project Support Officer"
     else:
         return ""
 
@@ -133,4 +141,4 @@ with open(Path(__file__).parent / 'preliminary_skills', 'wb') as fh:  # notice t
     pickle.dump(skills_list, fh)
 
 # df to csv
-#final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_all_skills.csv')
+#final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_all_skills_30+.csv')
