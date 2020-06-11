@@ -1,20 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <title>Homepage</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+
+
+{% block body %}
+<div id="container" class="container">
 
     <h1>Recognition Engine</h1>
 
-    <div class="container">
-        <input type="text" id="input-skills">
-        <button type="submit" id="btn-submit-skills">Submit</button>
+    <div id="wrapper" class="wrapper">
+        <form role="form" id="consultant" action="/" method="POST">
+            <div class="one">
+                <select id="select-name" name="vals" placeholder="Select a person..." multiple>
+                    {% for skill in skills %}
+                    <option value="{{ skill }}">{{ skill }}</option>
+                    {% endfor %}
+                </select>
+                <p id="chosen-skill"></p>
+            </div>
+            <div class="two">
+                <input type="submit" id="send-skills" value="Submit">
+            </div>
+        </form>
     </div>
 
 
-</body>
-</html>
+    <div>
+        {{ error_message }}
+        {% if len_consultants > 0 %}
+        <table>
+
+            <tr>
+                <th>
+                    Name
+                </th>
+                {% for skill in select %}
+
+                <th>
+                    {{ skill }}
+                </th>
+
+                {% endfor %}
+
+            </tr>
+            {% for consultant in consultants %}
+            <tr>
+                <td>
+                    {{consultant.name.first_name + " " + consultant.name.last_name}}
+                </td>
+                {% for key,value in consultant.skills.items() %}
+                <td>
+                    {{ value }}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+
+        </table>
+        {% endif %}
+
+
+    </div>
+    </div>
+{% endblock %}
+

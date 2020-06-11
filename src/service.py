@@ -19,26 +19,6 @@ with open(os.path.join(os.path.dirname(__file__), 'candidates_df'), 'rb') as fh:
 # print(df.index)
 
 
-# Populate db
-def add_consultant():
-    consultant = db_consultant.insert_one({
-        "name": {
-            "first_name": "Susan",
-            "last_name": "Campbell"
-        },
-        "streams": {
-            "development": True,
-            "business_analysis": False,
-            "business_intelligence": False
-        },
-        "skills": {
-            "Java": 3,
-            "Python": 9,
-        }
-    })
-    print("user added successfully !!!")
-
-
 def add_consultants():
     dict_consultant = {"name": {}, "stream": {}, "skills": {}}
     for index in df.index:
@@ -104,7 +84,6 @@ def query_consultants_with_skills(list_skills):
     query.pop()
     query.append('] }')
     query2 = ''.join(query)
-    print(query2)
     d = json.loads(query2)
     consultants_cursor = db_consultant.find(d)
     consultants_list = list()
@@ -124,8 +103,8 @@ def filter_skills_consultant(cons, list_skills):
     return cons
 
 mydoc = query_consultants_with_skills(['java', 'sql','python'])
-for c in mydoc:
-   print(c)
+# for c in mydoc:
+#    print(c)
 
 """
         "streams": {

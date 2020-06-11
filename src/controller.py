@@ -6,16 +6,23 @@ blueprint = Blueprint("controller", __name__)
 
 @blueprint.route('/', methods=['POST', 'GET'])
 def index():
+    consultants = []
+    skills = service.get_all_skills()
     if request.method == 'POST':
-        # "type >>java, python" = "choice of skills from client"
-        list_items = ""
+        select = request.form.getlist('vals')
+        error_message = ""
         try:
-            consultants = service.query_consultants_with_skills(list_items)
-            return render_template('index.html', consultants=consultants)
+            if len(select) > 0:
+                consultants = service.query_consultants_with_skills(select)
+                if len(consultants) < 1:
+                    error_message = "Sorry no Candidates met your criteria!"
+            else:
+                error_message = "Please choose a skill!"
+
+            return render_template('index.html', consultants=consultants, select=select, skills=skills,
+                                   error_message=error_message, len_consultants=len(consultants))
+
         except:
             return "No skills were added, or no candidates met your criteria!"
     else:
-        # we need to get all skills from db to display at front
-        skills = service.get_all_skills()
-
-        return render_template('index.html', skills=skills)
+        return render_template('index.html', skills=skills, len_consultants=len(consultants))
