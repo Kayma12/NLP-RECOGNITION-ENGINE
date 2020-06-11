@@ -90,13 +90,39 @@ def query_skills(list_skills):
     consultants_list = list()
     for c in consultants_cursor:
         cons = Consultant(c['name']['first_name'], c['name']['last_name'], c.get('stream'), c.get('skills'))
+        cons = filter_skills_consultant(cons, list_skills)
         consultants_list.append(cons)
     return consultants_list
 
+# Returns a list of consultants that have at least one skill from the list
+def query_consultants_with_skills(list_skills):
+    query = list()
+    query.append('{ $or: [')
+    for l in list_skills:
+        query.append({"skills." + l: {"$gt": 0}})
+    query.append('] }')
+    query2 = ''.join(query)
+    print(query2)
+    consultants_cursor = db_consultant.find(query2)
+    consultants_list = list()
+    for c in consultants_cursor:
+        cons = Consultant(c['name']['first_name'], c['name']['last_name'], c.get('stream'), c.get('skills'))
+        cons = filter_skills_consultant(cons, list_skills)
+        consultants_list.append(cons)
+    return consultants_list
 
-mydoc = query_skills(['java', 'python'])
-# for c in mydoc:
-#    print(c)
+# Given a consultant and a list of skills, returns the consultant with given skills only
+def filter_skills_consultant(cons, list_skills):
+    skills_consultant = cons.skills
+    result = dict()
+    for l in list_skills:
+        result.update({l : skills_consultant.get(l)})
+    cons.skills = result
+    return cons
+
+mydoc = query_skills(['java', 'sql','python'])
+for c in mydoc:
+   print(c)
 
 """
         "streams": {
@@ -108,3 +134,4 @@ mydoc = query_skills(['java', 'python'])
 
 # a_consultant = Consultant('Gertrude', 'Wilson', 'developer', {'Java' : 3, 'Python' : 9, 'HTML5' : 2, 'CSS3' : 2}, availability = True)
 # print(a_consultant)
+
