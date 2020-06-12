@@ -3,14 +3,15 @@
 
 
 {% block body %}
+ <h1>Recognition Engine</h1>
+
 <div id="container" class="container">
 
-    <h1>Recognition Engine</h1>
 
     <div id="wrapper" class="wrapper">
         <form role="form" id="consultant" action="/" method="POST">
             <div class="one">
-                <select id="select-name" name="vals" placeholder="Select a person..." multiple>
+                <select id="select-name" name="vals" placeholder="Select a skill..." multiple>
                     {% for skill in skills %}
                     <option value="{{ skill }}">{{ skill }}</option>
                     {% endfor %}
@@ -19,16 +20,21 @@
             </div>
             <div class="two">
                 <input type="submit" id="send-skills" value="Submit">
+
             </div>
+
         </form>
+
+
+
     </div>
 
 
-    <div>
-        {{ error_message }}
+    <div style="color:red; font-size: 18px;"> {{ error_message }}</div>
+
         {% if len_consultants > 0 %}
         <table>
-
+            <thead>
             <tr>
                 <th>
                     Name
@@ -42,6 +48,8 @@
                 {% endfor %}
 
             </tr>
+            </thead>
+            <tbody>
             {% for consultant in consultants %}
             <tr>
                 <td>
@@ -54,12 +62,12 @@
                 {% endfor %}
             </tr>
             {% endfor %}
-
+            </tbody>
         </table>
         {% endif %}
 
 
-    </div>
+
     </div>
 {% endblock %}
 

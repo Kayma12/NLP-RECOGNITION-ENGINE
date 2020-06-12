@@ -100,7 +100,7 @@ def skill_cv_comparison(file):
                 if result in skills_dict:
                     skills_dict[result] = skills_dict.get(result) + 1
 
-    dev_map = {key: val for key, val in skills_dict.items() if val > 0}
+    dev_map = {key: val for key, val in skills_dict.items() }  #if val > 0
     df = pd.DataFrame([dev_map], columns=dev_map.keys())
     df_name = get_candidate_name(file)
     df_with_name = pd.concat([df, df_name], axis=1)
@@ -129,7 +129,7 @@ final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candida
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
-#print(final_candidates_df)
+#print(final_candidates_df['team foundation server (tfs)'])
 # print(final_candidates_df.index)
 
 # this will create a file called candidates_df that will store the data frame

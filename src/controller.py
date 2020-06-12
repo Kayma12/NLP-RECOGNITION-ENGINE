@@ -17,7 +17,7 @@ def index():
                 if len(consultants) < 1:
                     error_message = "Sorry no Candidates met your criteria!"
             else:
-                error_message = "Please choose a skill!"
+                error_message = "Please choose at least one skill!"
 
             return render_template('index.html', consultants=consultants, select=select, skills=skills,
                                    error_message=error_message, len_consultants=len(consultants))
