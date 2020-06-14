@@ -14,6 +14,8 @@ stopword = nltk.corpus.stopwords.words('english')
 def clean_cv(text):
     text = text.lower()
     text = remove_punct(text)
+    text = join_java_and_script(text)
+
     text_token = tokenize(text)
     sent_tok = senetnce_tokenize(text)
     text_no_stop = remove_stopwords(sent_tok)
@@ -22,7 +24,7 @@ def clean_cv(text):
 
 # remove punctuation
 def remove_punct(text):
-    punc_keep = [')', '(', '-', '+', '#']  # (C)  c
+    punc_keep = ['-', '+', '#']  # (C)  c ')', '(',
     new_punc = []
     for punc in string.punctuation:
         if punc in punc_keep:
@@ -86,3 +88,12 @@ def remove_alevel_gcse_section(cv):
         cv_text += lines[i] + " "
 
     return cv_text
+
+
+def join_java_and_script(cv):
+    find_java_followed_script = re.findall(r'{0}(?:\s{1}+)'.format('java', 'script'), cv)
+    if len(find_java_followed_script) > 0:
+        for match in find_java_followed_script:
+            cv = cv.replace(match, str(match).replace(" ", ""))
+
+    return cv
