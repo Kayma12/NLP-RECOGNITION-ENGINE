@@ -129,7 +129,7 @@ final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candida
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
-print(final_candidates_df['java'])
+# print(final_candidates_df.to_string())
 # print(final_candidates_df.index)
 
 # this will create a file called candidates_df that will store the data frame
