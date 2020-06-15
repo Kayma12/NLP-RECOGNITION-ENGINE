@@ -100,7 +100,7 @@ def skill_cv_comparison(file):
                 if result in skills_dict:
                     skills_dict[result] = skills_dict.get(result) + 1
 
-    dev_map = {key: val for key, val in skills_dict.items() }  #if val > 0
+    dev_map = {key: val for key, val in skills_dict.items()}  # if val > 0
     df = pd.DataFrame([dev_map], columns=dev_map.keys())
     df_name = get_candidate_name(file)
     df_with_name = pd.concat([df, df_name], axis=1)
@@ -115,21 +115,28 @@ def skill_cv_comparison(file):
 # Final dataframe with more than one cvs
 final_candidates_df = pd.DataFrame()
 df_stream = pd.DataFrame(columns=['Stream'])
+save_cv = pd.DataFrame(columns=['Candidate_cv'])
 index = 0
 while index < len(cv_file):
     a_cv_file = cv_file[index]
     cv_before_cleaning = read_in_files.read_in_doc_docx_file(a_cv_file)
     stream = get_stream(cv_before_cleaning.lower())
     df_stream.loc[index] = stream
+    # save cv in df
+    save_cv.loc[index] = cv_before_cleaning
+    # cv comparison
     cv_data = skill_cv_comparison(a_cv_file)
     final_candidates_df = pd.concat([final_candidates_df, cv_data])
     index += 1
 
-final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candidates_df.index))
+final_candidates_df = final_candidates_df.join(save_cv.set_index(final_candidates_df.index))
+frames = [final_candidates_df,df_stream]
+final_candidates_df = pd.concat(frames)
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
-# print(final_candidates_df.to_string())
+
+#print(final_candidates_df.to_string())
 # print(final_candidates_df.index)
 
 # this will create a file called candidates_df that will store the data frame
@@ -141,4 +148,4 @@ with open(Path(__file__).parent / 'preliminary_skills', 'wb') as fh:  # notice t
     pickle.dump(skills_list, fh)
 
 # df to csv
-#final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_all_skills_30+.csv')
+# final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_all_skills_30+.csv')
