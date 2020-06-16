@@ -129,14 +129,18 @@ while index < len(cv_file):
     final_candidates_df = pd.concat([final_candidates_df, cv_data])
     index += 1
 
+#print(df_stream.reset_index())
+#df_stream.drop['index']
+#print(df_stream)
 final_candidates_df = final_candidates_df.join(save_cv.set_index(final_candidates_df.index))
-frames = [final_candidates_df,df_stream]
-final_candidates_df = pd.concat(frames)
+final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candidates_df.index))
+# frames = [final_candidates_df,df_stream]
+# final_candidates_df = pd.concat(frames)
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
-
-#print(final_candidates_df.to_string())
+# print(final_candidates_df.info())
+# print(final_candidates_df[['java', 'Stream']].to_string())
 # print(final_candidates_df.index)
 
 # this will create a file called candidates_df that will store the data frame

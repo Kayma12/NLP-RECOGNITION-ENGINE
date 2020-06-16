@@ -14,7 +14,7 @@ with open(os.path.join(os.path.dirname(__file__), 'preliminary_skills'), 'rb') a
 with open(os.path.join(os.path.dirname(__file__), 'candidates_df'), 'rb') as fh:  # you need to use 'rb' to read
     df = pickle.load(fh)
 
-
+#print(df[['java','Stream']])
 # print(df)
 # print(df.index)
 
@@ -27,7 +27,10 @@ def add_consultants():
         dict_consultant['name']['last_name'] = index.split()[1]
 
         for col in df.columns:
-            if (col != 'Stream'):
+
+            if (col != 'Stream' and col != 'Candidate_cv'):
+                #print(index)
+                #print(df.loc[index, col])
                 dict_consultant['skills'][col] = int(df.loc[index, col])
             else:
                 dict_consultant['stream'] = df.loc[index, col]
