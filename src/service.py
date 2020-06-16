@@ -20,7 +20,7 @@ with open(os.path.join(os.path.dirname(__file__), 'candidates_df'), 'rb') as fh:
 
 
 def add_consultants():
-    dict_consultant = {"name": {}, "stream": {}, "skills": {}}
+    dict_consultant = {"name": {}, "stream": {}, "skills": {}, "consultant_cv": {}}
     for index in df.index:
         dict_consultant['_id'] = ObjectId()
         dict_consultant['name']['first_name'] = index.split()[0]
@@ -32,8 +32,10 @@ def add_consultants():
                 #print(index)
                 #print(df.loc[index, col])
                 dict_consultant['skills'][col] = int(df.loc[index, col])
-            else:
+            elif (col == 'Stream'):
                 dict_consultant['stream'] = df.loc[index, col]
+            else:
+                dict_consultant['consultant_cv'] = df.loc[index, col]
         db_consultant.insert_one(dict_consultant)
         # print(dict_consultant)
 
