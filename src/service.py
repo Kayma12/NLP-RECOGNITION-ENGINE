@@ -28,12 +28,17 @@ def add_consultants():
 
         for col in df.columns:
 
-            if (col != 'Stream' and col != 'Candidate_cv'):
+            if (col != 'Stream' and col != 'Candidate_cv' and col != 'cv_path'):
                 #print(index)
                 #print(df.loc[index, col])
                 dict_consultant['skills'][col] = int(df.loc[index, col])
             elif (col == 'Stream'):
                 dict_consultant['stream'] = df.loc[index, col]
+            elif (col == 'cv_path'):
+                #with open(df.loc[index, col], mode='rb') as file:  # b is important -> binary
+                with open('src/dummy_cvs/John Wick-Tester-CV.docx', mode='rb') as file:  # b is important -> binary
+                    data = file.read()
+                dict_consultant['cv_file'] = data
             else:
                 dict_consultant['consultant_cv'] = df.loc[index, col]
         db_consultant.insert_one(dict_consultant)
