@@ -54,6 +54,9 @@ input[type=submit]:hover {
 .dataTables_wrapper {
     margin-top: 41px;
     background: white;
+    padding-top: 13px;
+    border-radius: 25px;
+    padding: 20px;
 
 }
 
@@ -72,4 +75,13 @@ button, input, optgroup, select, textarea {
   line-height: 1.2;
   font-weight: unset;
 
+}
+
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+
+  font-family: OpenSans-Regular;
+  font-size: 15px;
+  color: #808080;
+  line-height: 1.2;
+  font-weight: unset;
 }
