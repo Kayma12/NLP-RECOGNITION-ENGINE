@@ -3,9 +3,10 @@
 
 
 {% block body %}
- <h1>Recognition Engine</h1>
 
-<div id="container" class="container">
+ <h1 class="text-center">Recognition Engine</h1>
+
+<div id="container" class="mt-2 col-md-12">
 
 
     <div id="wrapper" class="wrapper">
@@ -28,20 +29,22 @@
 
 
     </div>
+    </div>
 
+    <div class="container">
 
     <div style="color:red; font-size: 18px;"> {{ error_message }}</div>
 
         {% if len_consultants > 0 %}
-        <table>
+        <table class="table" id="mydatatable">
             <thead>
             <tr>
-                <th>
+                <th scope="col">
                     Name
                 </th>
                 {% for skill in select %}
 
-                <th>
+                <th scope="col">
                     {{ skill }}
                 </th>
 
@@ -52,9 +55,9 @@
             <tbody>
             {% for consultant in consultants %}
             <tr>
-                <td>
+                <th scope="row">
                     {{consultant.name.first_name + " " + consultant.name.last_name}}
-                </td>
+                </th>
                 {% for key,value in consultant.skills.items() %}
                 <td>
                     {{ value }}
@@ -66,8 +69,8 @@
         </table>
         {% endif %}
 
-
-
     </div>
+
+
 {% endblock %}
 

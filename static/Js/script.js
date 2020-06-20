@@ -3,3 +3,7 @@ $(document).ready(function(){
 }
 );
 });
+
+$(document).ready( function () {
+    $('#mydatatable').DataTable();
+} );
