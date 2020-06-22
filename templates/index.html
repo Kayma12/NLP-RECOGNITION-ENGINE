@@ -33,6 +33,7 @@
 
     <div class="container">
 
+
     <div style="color:red; font-size: 18px;"> {{ error_message }}</div>
 
         {% if len_consultants > 0 %}
@@ -53,7 +54,9 @@
             </tr>
             </thead>
             <tbody>
+
             {% for consultant in consultants %}
+
             <tr>
                 <th scope="row">
                     {{consultant.name.first_name + " " + consultant.name.last_name}}
