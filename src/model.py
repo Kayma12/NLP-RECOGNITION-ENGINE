@@ -14,18 +14,20 @@
 
 class Consultant:
 
-    def __init__(self, first_name, last_name, stream, skills, availability = True):
+    def __init__(self, consultant_id, first_name, last_name, stream, skills, availability = True):
+        self.consultant_id = consultant_id
         self.name = {'first_name' : first_name, 'last_name' : last_name}
         self.stream = stream
         self.skills = skills  # dictionary
         self.availability = availability
 
     def __repr__(self):
-        return {'name' : self.name, 'stream' : self.stream, 'skills' : self.skills, 'availability' : self.availability}
+        return {'id' : self.consultant_id, 'name' : self.name, 'stream' : self.stream, 'skills' : self.skills, 'availability' : self.availability}
 
     def __str__(self):
         return '''Consultant:
+                   id : {},
                    name: {} {}, 
                    stream : {}, 
                    skills : {}, 
-                   availability : {}'''.format(self.name['first_name'], self.name['last_name'], self.stream, self.skills, self.availability)
+                   availability : {}'''.format(self.consultant_id, self.name['first_name'], self.name['last_name'], self.stream, self.skills, self.availability)
