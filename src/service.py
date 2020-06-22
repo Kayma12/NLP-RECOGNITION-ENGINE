@@ -29,11 +29,17 @@ def add_consultants():
         for col in df.columns:
 
             if (col != 'Stream' and col != 'Candidate_cv'and col != 'cv_path'):
+
                 #print(index)
                 #print(df.loc[index, col])
                 dict_consultant['skills'][col] = int(df.loc[index, col])
             elif (col == 'Stream'):
                 dict_consultant['stream'] = df.loc[index, col]
+            elif (col == 'cv_path'):
+                with open(df.loc[index, col], mode='rb') as file:  # b is important -> binary
+                    #with open('src/dummy_cvs/John Wick-Tester-CV.docx', mode='rb') as file:  # b is important -> binary
+                    data = file.read()
+                dict_consultant['cv_file'] = data
             else:
                 dict_consultant['consultant_cv'] = df.loc[index, col]
         db_consultant.insert_one(dict_consultant)
@@ -93,7 +99,7 @@ def query_consultants_with_skills(list_skills):
     consultants_cursor = db_consultant.find(d)
     consultants_list = list()
     for c in consultants_cursor:
-        cons = Consultant(c['name']['first_name'], c['name']['last_name'], c.get('stream'), c.get('skills'))
+        cons = Consultant(c.get('_id'), c['name']['first_name'], c['name']['last_name'], c.get('stream'), c.get('skills'))
         cons = filter_skills_consultant(cons, list_skills)
         consultants_list.append(cons)
     return consultants_list
@@ -106,6 +112,10 @@ def filter_skills_consultant(cons, list_skills):
         result.update({l : skills_consultant.get(l)})
     cons.skills = result
     return cons
+
+# Return a Consulant with a given ID with (the 10 highest) skills that are not 0
+def get_consulant(consultant_id):
+    consultant = db_consultant.find_one({"_id": consultant_id})
 
 mydoc = query_consultants_with_skills(['java', 'sql','python'])
 # for c in mydoc:
