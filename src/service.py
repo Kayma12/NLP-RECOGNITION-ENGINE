@@ -113,10 +113,24 @@ def filter_skills_consultant(cons, list_skills):
     cons.skills = result
     return cons
 
-# Return a Consulant with a given ID with (the 10 highest) skills that are not 0
-def get_consulant(consultant_id):
-    consultant = db_consultant.find_one({"_id": consultant_id})
+# Given a consultant, returns the consultant with his 10 best skills
+def filter_10_skills(cons):
+    dict_skills = dict()
+    for l in cons.skills:
+        if(cons.skills.get(l) != 0): dict_skills.update({l: cons.skills.get(l)})
+    sort_skills = sorted(dict_skills.items(), key=lambda x: x[1], reverse=True)[0:10]
+    cons.skills = sort_skills
+    return cons
 
+# Return a Consulant with a given ID with (the 10 highest) skills that are not 0
+def get_consultant(consultant_id):
+    c = db_consultant.find_one({"_id": consultant_id})
+    # c = db_consultant.find_one({"name.last_name": consultant_id})
+    consultant = Consultant(c.get('_id'), c['name']['first_name'], c['name']['last_name'], c.get('stream'), c.get('skills'))
+    consultant = filter_10_skills(consultant)
+    return consultant
+
+# get_consultant('Wick')
 mydoc = query_consultants_with_skills(['java', 'sql','python'])
 # for c in mydoc:
 #    print(c)
