@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 
 
-
 {% block body %}
 
- <h1 class="text-center">Recognition Engine</h1>
+<h1 class="text-center">Recognition Engine</h1>
 
 <div id="container" class="mt-2 col-md-12">
 
@@ -27,52 +26,53 @@
         </form>
 
 
-
     </div>
-    </div>
+</div>
 
-    <div class="container">
+<div class="container">
 
 
     <div style="color:red; font-size: 18px;"> {{ error_message }}</div>
 
-        {% if len_consultants > 0 %}
-        <table class="table" id="mydatatable">
-            <thead>
-            <tr>
-                <th scope="col">
-                    Name
-                </th>
-                {% for skill in select %}
+    {% if len_consultants > 0 %}
+    <table class="table" id="mydatatable">
+        <thead>
+        <tr>
+            <th scope="col">
+                Name
+            </th>
+            {% for skill in select %}
 
-                <th scope="col">
-                    {{ skill }}
-                </th>
+            <th scope="col">
+                {{ skill }}
+            </th>
 
-                {% endfor %}
-
-            </tr>
-            </thead>
-            <tbody>
-
-            {% for consultant in consultants %}
-
-            <tr>
-                <th scope="row">
-                    {{consultant.name.first_name + " " + consultant.name.last_name}}
-                </th>
-                {% for key,value in consultant.skills.items() %}
-                <td>
-                    {{ value }}
-                </td>
-                {% endfor %}
-            </tr>
             {% endfor %}
-            </tbody>
-        </table>
-        {% endif %}
 
-    </div>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for consultant in consultants %}
+
+        <tr>
+            <th scope="row">
+                  <a href="{{ url_for('controller.profile_page', candidate_id=consultant.consultant_id)}}">{{consultant.name.first_name
+    + " " + consultant.name.last_name}}</a>
+            </th>
+            {% for key,value in consultant.skills.items() %}
+            <td>
+
+                {{ value }}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+</div>
 
 
 {% endblock %}

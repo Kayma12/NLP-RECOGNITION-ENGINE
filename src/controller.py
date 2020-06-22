@@ -29,9 +29,7 @@ def index():
         return render_template('index.html', skills=skills, len_consultants=len(consultants))
 
 
-@blueprint.route('/candidate-profile/<candidate_id>', methods=['POST', 'GET'])
+@blueprint.route('/profile_page/<candidate_id>', methods=['POST', 'GET'])
 def profile_page(candidate_id):
     print(candidate_id)
     return render_template('profile_page.html')
-
-
