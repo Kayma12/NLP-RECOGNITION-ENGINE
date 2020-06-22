@@ -14,6 +14,7 @@ def index():
         try:
             if len(select) > 0:
                 consultants = service.query_consultants_with_skills(select)
+
                 if len(consultants) < 1:
                     error_message = "Sorry no Candidates met your criteria!"
             else:
@@ -26,3 +27,9 @@ def index():
             return "No skills were added, or no candidates met your criteria!"
     else:
         return render_template('index.html', skills=skills, len_consultants=len(consultants))
+
+
+@blueprint.route('/profile_page/<candidate_id>', methods=['POST', 'GET'])
+def profile_page(candidate_id):
+    print(candidate_id)
+    return render_template('profile_page.html')
