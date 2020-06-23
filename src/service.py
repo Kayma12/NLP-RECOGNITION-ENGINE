@@ -124,9 +124,7 @@ def filter_10_skills(cons):
 
 # Return a Consulant with a given ID with (the 10 highest) skills that are not 0
 def get_consultant(consultant_id):
-    print(consultant_id)
-    c = db_consultant.find_one({"_id": consultant_id})
-    print(c)
+    c = db_consultant.find_one({"_id": ObjectId(consultant_id)})
     # c = db_consultant.find_one({"name.last_name": consultant_id})
     consultant = Consultant(c.get('_id'), c['name']['first_name'], c['name']['last_name'], c.get('stream'), c.get('skills'))
     consultant = filter_10_skills(consultant)
