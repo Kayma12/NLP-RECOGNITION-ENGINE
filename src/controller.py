@@ -31,9 +31,7 @@ def index():
 
 @blueprint.route('/profile_page/<candidate_id>', methods=['POST', 'GET'])
 def profile_page(candidate_id):
-    print(candidate_id)
     consultant_details =  service.get_consultant(candidate_id)
     print(consultant_details)
-
 
     return render_template('profile_page.html')
