@@ -31,13 +31,7 @@ def index():
 
 @blueprint.route('/profile_page/<candidate_id>', methods=['POST', 'GET'])
 def profile_page(candidate_id):
-<<<<<<< HEAD
-    print(candidate_id)
-    #consultant_details =  service.get_consultant(candidate_id)
-    #print(consultant_details)
-=======
-    consultant_details =  service.get_consultant(candidate_id)
-    print(consultant_details)
->>>>>>> 64e39a6dd8e1253e0952c36940b8c58662516f7e
+    consultant_details = service.get_consultant(candidate_id)
+    # consultant_details.availability == true
 
-    return render_template('profile_page.html')
+    return render_template('profile_page.html', consultant_details=consultant_details)

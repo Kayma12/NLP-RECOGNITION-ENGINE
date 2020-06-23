@@ -1,10 +1,32 @@
 {% extends 'base.html' %}
 
+{% block extra_css %} <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css' )}}"> {% endblock %}
+{% block  body %}
+
+<h1> {{ consultant_details.name.first_name }}'s Profile </h1>
+
+<div class="container-profile">
+<!--    {{ consultant_details }}-->
 
 
-{% block body %}
-<h1> PROFILE PAGE</h1>
+<ul class="nav nav-pills nav-fill">
+  <li class="nav-item">
+    <h2 class="name_color1"> {{consultant_details.name.first_name
+    + " " + consultant_details.name.last_name}}</h2>
+  </li>
+      <li class="nav-item">
 
+  </li>
+  <li class="nav-item">
+   <h5 class="name_color2"> <a class="nav-link" href="#">Link To CV</a> </h5>
+  </li>
+  <li class="nav-item">
+    <h3> Stream:  {{ consultant_details.stream }} </h3>
+  </li>
+  <li class="nav-item">
+   <h3> Availability: {{ consultant_details.availability }}  </h3>
+  </li>
+</ul>
 
-
+</div>
 {% endblock %}
