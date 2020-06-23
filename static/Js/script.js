@@ -21,7 +21,7 @@ for(var i = 1; i < rows.length ; i++){
  var sum = 0;
 
 for(var x = 1; x < cells.length - 1 ; x++){
-    var cell = cells[x];:wq
+    var cell = cells[x];
     console.log(cell.innerHTML + "vallllllllls")
     sum += parseInt(cell.innerHTML);
 
