@@ -16,7 +16,7 @@ def index():
                 consultants = service.query_consultants_with_skills(select)
 
                 if len(consultants) < 1:
-                    error_message = "Sorry no Candidates met your criteria!"
+                    error_message = "There are no CVs selected."
             else:
                 error_message = "Please choose at least one skill!"
 
@@ -24,7 +24,7 @@ def index():
                                    error_message=error_message, len_consultants=len(consultants))
 
         except:
-            return "No skills were added, or no candidates met your criteria!"
+            return "Please try again"
     else:
         return render_template('index.html', skills=skills, len_consultants=len(consultants))
 
@@ -32,6 +32,12 @@ def index():
 @blueprint.route('/profile_page/<candidate_id>', methods=['POST', 'GET'])
 def profile_page(candidate_id):
     consultant_details = service.get_consultant(candidate_id)
-    # consultant_details.availability == true
+
+    if consultant_details.availability == True:
+        consultant_details.availability = 'Yes'
+    else:
+        consultant_details.availability = 'No'
+
+        # consultant_details.availability == true
 
     return render_template('profile_page.html', consultant_details=consultant_details)
