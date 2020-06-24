@@ -5,6 +5,8 @@ from bson.objectid import ObjectId
 from database import db_consultant, db_skills
 import skills.cleaning_skills as pre_skills
 from model import Consultant
+from bson import Binary
+
 
 # get skills
 with open(os.path.join(os.path.dirname(__file__), 'preliminary_skills'), 'rb') as fh:  # you need to use 'rb' to read
@@ -36,10 +38,10 @@ def add_consultants():
             elif (col == 'Stream'):
                 dict_consultant['stream'] = df.loc[index, col]
             elif (col == 'cv_path'):
-                with open(df.loc[index, col], mode='rb') as file:  # b is important -> binary
-                    #with open('src/dummy_cvs/John Wick-Tester-CV.docx', mode='rb') as file:  # b is important -> binary
-                    data = file.read()
-                dict_consultant['cv_file'] = data
+                with open(df.loc[index, col], "rb") as f:
+                    data = f.read()
+                bi = Binary(data)
+                dict_consultant['cv_file'] = bi
             else:
                 dict_consultant['consultant_cv'] = df.loc[index, col]
         db_consultant.insert_one(dict_consultant)
@@ -129,6 +131,12 @@ def get_consultant(consultant_id):
     consultant = Consultant(c.get('_id'), c['name']['first_name'], c['name']['last_name'], c.get('stream'), c.get('skills'))
     consultant = filter_10_skills(consultant)
     return consultant
+
+# Given a Consultant ID returns the binary file of the consultant 
+def get_binary(consultant_id):
+    c = db_consultant.find_one({"_id": ObjectId(consultant_id)})
+    binary = c.get('cv_file')
+    return binary
 
 # get_consultant('Wick')
 mydoc = query_consultants_with_skills(['java', 'sql','python'])
