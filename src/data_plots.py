@@ -1,13 +1,14 @@
-import matplotlib.pyplot as plt
+import matplotlib
+from matplotlib import pyplot as plt
 import numpy as np
-
-from service import filter_10_skills
+matplotlib.use('Agg')
 
 def get_skills(a_dictionary):
     skill_names = []
     for skill in a_dictionary.keys():
         skill_names.append(skill)
     return skill_names
+
 
 def get_frequency_values(a_dictionary):
     frequencies = []
@@ -17,8 +18,8 @@ def get_frequency_values(a_dictionary):
     return frequencies
 
 
-def create_bar_chart(a_dict):
-    a_dict = filter_10_skills(a_dict)
+def create_bar_chart(filtered_skills):
+    a_dict = dict(filtered_skills)
     skills = get_skills(a_dict)
     values = get_frequency_values(a_dict)
 

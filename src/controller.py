@@ -1,5 +1,9 @@
-from flask import Blueprint, render_template, request
+import io
+from flask import Blueprint, render_template, request, Response, make_response, send_file
+
+
 import service
+import data_plots
 
 blueprint = Blueprint("controller", __name__)
 
@@ -16,7 +20,7 @@ def index():
                 consultants = service.query_consultants_with_skills(select)
 
                 if len(consultants) < 1:
-                    error_message = "There are no CVs selected."
+                    error_message = "There are no candidates available for selected criteria"
             else:
                 error_message = "Please choose at least one skill!"
 
@@ -33,11 +37,18 @@ def index():
 def profile_page(candidate_id):
     consultant_details = service.get_consultant(candidate_id)
 
-    if consultant_details.availability == True:
+    if consultant_details.availability:
         consultant_details.availability = 'Yes'
     else:
         consultant_details.availability = 'No'
-
-        # consultant_details.availability == true
-
     return render_template('profile_page.html', consultant_details=consultant_details)
+
+
+@blueprint.route('/send_image/<candidate_id>', methods=['POST', 'GET'])
+def send_image(candidate_id):
+    consultant_details = service.get_consultant(candidate_id)
+    barchart_plot = data_plots.create_bar_chart(consultant_details.skills)
+    img = io.BytesIO()
+    barchart_plot.savefig(img)
+    img.seek(0)
+    return send_file(img, mimetype='image/png')
