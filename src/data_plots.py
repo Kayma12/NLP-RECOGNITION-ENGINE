@@ -3,9 +3,17 @@ from matplotlib import pyplot as plt
 import numpy as np
 matplotlib.use('Agg')
 
+font = {'family': 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif',
+
+        'weight' : 'bold',
+        'size'   : 22}
+
+matplotlib.rc('font', **font)
+
 def get_skills(a_dictionary):
     skill_names = []
     for skill in a_dictionary.keys():
+        skill = skill.capitalize()
         skill_names.append(skill)
     return skill_names
 
