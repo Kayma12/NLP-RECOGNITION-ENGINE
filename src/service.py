@@ -5,6 +5,8 @@ from bson.objectid import ObjectId
 from database import db_consultant, db_skills
 import skills.cleaning_skills as pre_skills
 from model import Consultant
+from bson import Binary
+
 
 # get skills
 with open(os.path.join(os.path.dirname(__file__), 'preliminary_skills'), 'rb') as fh:  # you need to use 'rb' to read
@@ -28,12 +30,18 @@ def add_consultants():
 
         for col in df.columns:
 
-            if (col != 'Stream' and col != 'Candidate_cv'):
+            if (col != 'Stream' and col != 'Candidate_cv'and col != 'cv_path'):
+
                 #print(index)
                 #print(df.loc[index, col])
                 dict_consultant['skills'][col] = int(df.loc[index, col])
             elif (col == 'Stream'):
                 dict_consultant['stream'] = df.loc[index, col]
+            elif (col == 'cv_path'):
+                with open(df.loc[index, col], "rb") as f:
+                    data = f.read()
+                bi = Binary(data)
+                dict_consultant['cv_file'] = bi
             else:
                 dict_consultant['consultant_cv'] = df.loc[index, col]
         db_consultant.insert_one(dict_consultant)
@@ -93,7 +101,7 @@ def query_consultants_with_skills(list_skills):
     consultants_cursor = db_consultant.find(d)
     consultants_list = list()
     for c in consultants_cursor:
-        cons = Consultant(c['name']['first_name'], c['name']['last_name'], c.get('stream'), c.get('skills'))
+        cons = Consultant(c.get('_id'), c['name']['first_name'], c['name']['last_name'], c.get('stream'), c.get('skills'))
         cons = filter_skills_consultant(cons, list_skills)
         consultants_list.append(cons)
     return consultants_list
@@ -107,6 +115,30 @@ def filter_skills_consultant(cons, list_skills):
     cons.skills = result
     return cons
 
+# Given a consultant, returns the consultant with his 10 best skills
+def filter_10_skills(cons):
+    dict_skills = dict()
+    for l in cons.skills:
+        if(cons.skills.get(l) != 0): dict_skills.update({l: cons.skills.get(l)})
+    sort_skills = sorted(dict_skills.items(), key=lambda x: x[1], reverse=True)[0:10]
+    cons.skills = sort_skills
+    return cons
+
+# Return a Consulant with a given ID with (the 10 highest) skills that are not 0
+def get_consultant(consultant_id):
+    c = db_consultant.find_one({"_id": ObjectId(consultant_id)})
+    # c = db_consultant.find_one({"name.last_name": consultant_id})
+    consultant = Consultant(c.get('_id'), c['name']['first_name'], c['name']['last_name'], c.get('stream'), c.get('skills'))
+    consultant = filter_10_skills(consultant)
+    return consultant
+
+# Given a Consultant ID returns the binary file of the consultant 
+def get_binary(consultant_id):
+    c = db_consultant.find_one({"_id": ObjectId(consultant_id)})
+    binary = c.get('cv_file')
+    return binary
+
+# get_consultant('Wick')
 mydoc = query_consultants_with_skills(['java', 'sql','python'])
 # for c in mydoc:
 #    print(c)

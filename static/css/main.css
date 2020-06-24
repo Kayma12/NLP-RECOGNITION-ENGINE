@@ -1,5 +1,5 @@
 body {
-    background-color:black;
+   background-color:black;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     min-height: 100vh;
     padding-top: 10px;
@@ -9,61 +9,12 @@ body {
     color: white;
 }
 
-.container {
-    background-color: white;
-    border-radius: 5px;
-    /* height: 50vh; */
-    text-align: left;
-    min-height: 10vh;
+.mt-2, .my-2 {
+/* Space between recognition text and search bar m */
+
+    margin-top: .5rem!important;
+    padding-top: 21px;
 }
-
-#input-skills {
-    background-color: rgb(199, 197, 197);
-    font-size: 20px;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    border-radius: 5px;
-    border-width: 2px;
-    margin-top: 50px;
-    margin-left: 20px;
-    min-width: 500px;
-    min-height: 40px;
-    padding-left: 10px;
-}
-
-#btn-submit-skills {
-    background-color: rgb(199, 197, 197);
-    border-radius: 5px;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-size: 15px;
-    margin: 10px;
-    min-width: 100px;
-    height: 40px;
-}
-
-#btn-submit-skills:hover {
-    background-color: gray;
-    cursor: pointer;
-}
-
-input[type=submit] {
- background-color: #C1C1C1;
- border-radius: 4px;
- color: white;
- font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
- font-size: 18px;
- padding: 10px 27px;
- text-decoration: none;
-
-  /*margin-right: 20px; */
- float: right;
- cursor: pointer;
- margin-top: -13px;
-}
-
-input[type=submit]:hover {
- background-color: #7B7474;
-}
-
 
 .selectize-dropdown, .selectize-input, .selectize-input input {
     color: #333;
@@ -76,7 +27,70 @@ input[type=submit]:hover {
 
 }
 
+.selectize-control.multi .selectize-input>div {
+
+    background-image: linear-gradient(to bottom,#5cb7f7,#5cb7f7);
+}
+
+input[type=submit] {
+ background-color: #5cb7f7;
+ border: 1px solid white ;
+ border-radius: 4px;
+ color: white;
+ font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+ font-size: 18px;
+ padding: 10px 27px;
+ text-decoration: none;
+ cursor: pointer;
+ margin-top: 4px;
+}
 
 
+input[type=submit]:hover {
+ background-color: #7B7474;
+}
 
 
+.dataTables_wrapper {
+    margin-top: 41px;
+    background: white;
+    padding-top: 13px;
+    border-radius: 25px;
+    padding: 20px;
+
+}
+
+label {
+  font-family: OpenSans-Regular;
+  font-size: 15px;
+  color: #808080;
+  line-height: 1.2;
+  font-weight: unset;
+}
+
+button, input, optgroup, select, textarea {
+  font-family: OpenSans-Regular;
+  font-size: 15px;
+  color: #808080;
+  line-height: 1.2;
+  font-weight: unset;
+
+}
+
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+
+  font-family: OpenSans-Regular;
+  font-size: 15px;
+  color: #808080;
+  line-height: 1.2;
+  font-weight: unset;
+}
+
+.container-profile {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 60px;
+}
