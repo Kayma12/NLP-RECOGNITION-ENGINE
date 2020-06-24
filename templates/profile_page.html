@@ -16,7 +16,7 @@
 
   </li>
   <li class="nav-item">
-   <h5 class="name_color2"> <a class="nav-link" href="#" style="color:black; margin-top: -1px;">CV</a> </h5>
+   <h5 class="name_color2"> <a class="nav-link" href="{{ url_for('controller.download_link', candidate_id=consultant_details.consultant_id)}}" style="color:black; margin-top: -1px;">CV</a> </h5>
   </li>
   <li class="nav-item">
     <h3> Stream:  {{ consultant_details.stream }} </h3>

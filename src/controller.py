@@ -52,3 +52,11 @@ def send_image(candidate_id):
     barchart_plot.savefig(img)
     img.seek(0)
     return send_file(img, mimetype='image/png')
+
+@blueprint.route('/download_link/<candidate_id>', methods=['POST', 'GET'])
+def download_link(candidate_id):
+    file = service.get_binary(candidate_id)
+    response = make_response(file)
+    response.headers['Content-Type'] = 'application/octet-stream'
+    response.headers["Content-Disposition"] = "attachment; filename={}".format('candidate_cv.docx')
+    return response
