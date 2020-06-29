@@ -138,7 +138,9 @@ def get_binary(consultant_id):
     binary = c.get('cv_file')
     return binary
 
-
+def check_if_database_is_not_empty():
+    cursor = db_consultant.find()
+    return cursor.count() != 0
 
 # get_consultant('Wick')
 mydoc = query_consultants_with_skills(['java', 'sql','python'])

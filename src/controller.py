@@ -31,7 +31,8 @@ def index():
     else:
         # if db is empty return empty index page with a comment asking to fill db with consultants else render the
         # template with skills >> render_template('index.html', skills=skills, len_consultants=len(consultants))
-        consultants_in_db  = False
+        consultants_in_db  = service.check_if_database_is_not_empty()
+
         return render_template('index.html', skills=skills, len_consultants=len(consultants), consultants_in_db=consultants_in_db)
 
 
