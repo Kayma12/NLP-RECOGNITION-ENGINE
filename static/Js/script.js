@@ -8,6 +8,7 @@ $(document).ready( function () {
     $('#mydatatable').DataTable();
 } );
 
+// Suitability code b
 
 var table=document.getElementById("mydatatable");
 var rows=table.rows;

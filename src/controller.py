@@ -1,7 +1,6 @@
 import io
 from flask import Blueprint, render_template, request, Response, make_response, send_file
 
-
 import service
 import data_plots
 
@@ -30,7 +29,10 @@ def index():
         except:
             return "Please try again"
     else:
-        return render_template('index.html', skills=skills, len_consultants=len(consultants))
+        # if db is empty return empty index page with a comment asking to fill db with consultants else render the
+        # template with skills >> render_template('index.html', skills=skills, len_consultants=len(consultants))
+        consultants_in_db  = False
+        return render_template('index.html', skills=skills, len_consultants=len(consultants), consultants_in_db=consultants_in_db)
 
 
 @blueprint.route('/profile_page/<candidate_id>', methods=['POST', 'GET'])
@@ -52,6 +54,7 @@ def send_image(candidate_id):
     barchart_plot.savefig(img)
     img.seek(0)
     return send_file(img, mimetype='image/png')
+
 
 @blueprint.route('/download_link/<candidate_id>', methods=['POST', 'GET'])
 def download_link(candidate_id):
