@@ -115,7 +115,7 @@ def skill_cv_comparison(file):
 # Final dataframe with more than one cvs
 final_candidates_df = pd.DataFrame()
 df_stream = pd.DataFrame(columns=['Stream', 'cv_path'])
-save_cv = pd.DataFrame(columns=['Candidate_cv'])
+#save_cv = pd.DataFrame(columns=['Candidate_cv'])
 cv_path = []
 index = 0
 while index < len(cv_file):
@@ -125,7 +125,7 @@ while index < len(cv_file):
     stream = get_stream(cv_before_cleaning.lower())
     df_stream.loc[index] = stream
     # save cv in df
-    save_cv.loc[index] = cv_before_cleaning
+    #save_cv.loc[index] = cv_before_cleaning
     # cv comparison
     cv_data = skill_cv_comparison(a_cv_file)
     final_candidates_df = pd.concat([final_candidates_df, cv_data])
@@ -133,12 +133,12 @@ while index < len(cv_file):
 
 df_stream['cv_path'] = cv_path
 
-final_candidates_df = final_candidates_df.join(save_cv.set_index(final_candidates_df.index))
+#final_candidates_df = final_candidates_df.join(save_cv.set_index(final_candidates_df.index))
 final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candidates_df.index))
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
-# print(final_candidates_df[['cv_path', 'Stream', 'java']].head(5).to_string())
+print(final_candidates_df[['cv_path', 'Stream', 'java']].head(5).to_string())
 
 
 # this will create a file called candidates_df that will store the data frame
