@@ -8,14 +8,13 @@ from cleaning_and_reading import cv_cleaning, read_in_files
 from skills import cleaning_skills as pre_skills
 from service import get_all_skills as db_skills
 
-# get skills from csv then clean them
-file_for_skills = Path(__file__).parent / "skills/preliminary_skills.csv"
 
-skills_list = pd.read_csv(file_for_skills)
-skills_list = pre_skills.get_skills_from_df_to_list(skills_list)
-skills_list = pre_skills.get_list_from_list(skills_list)
+# get skills from csv then clean them
+file_for_skills = Path(__file__).parent / "skills/AcademyHub_skills.xlsx"
+
+skills_list = pre_skills.read_excel_skills(file_for_skills)
 skills_list = pre_skills.clean_list_of_skills(skills_list)
-# print(skills_list)
+skills_list = pre_skills.academy_skills_cleaning(skills_list)
 
 # get cv from directory
 cv_dir = Path(__file__).parent / "dummy_cvs/"
@@ -115,7 +114,7 @@ def skill_cv_comparison(file):
 # Final dataframe with more than one cvs
 final_candidates_df = pd.DataFrame()
 df_stream = pd.DataFrame(columns=['Stream', 'cv_path'])
-#save_cv = pd.DataFrame(columns=['Candidate_cv'])
+# save_cv = pd.DataFrame(columns=['Candidate_cv'])
 cv_path = []
 index = 0
 while index < len(cv_file):
@@ -125,7 +124,7 @@ while index < len(cv_file):
     stream = get_stream(cv_before_cleaning.lower())
     df_stream.loc[index] = stream
     # save cv in df
-    #save_cv.loc[index] = cv_before_cleaning
+    # save_cv.loc[index] = cv_before_cleaning
     # cv comparison
     cv_data = skill_cv_comparison(a_cv_file)
     final_candidates_df = pd.concat([final_candidates_df, cv_data])
@@ -133,20 +132,20 @@ while index < len(cv_file):
 
 df_stream['cv_path'] = cv_path
 
-#final_candidates_df = final_candidates_df.join(save_cv.set_index(final_candidates_df.index))
+# final_candidates_df = final_candidates_df.join(save_cv.set_index(final_candidates_df.index))
 final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candidates_df.index))
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
-#print(final_candidates_df[['cv_path', 'Stream', 'java']].head(5).to_string())
-#print(final_candidates_df.info().to_string())
+# print(final_candidates_df[['cv_path', 'Stream', 'java']].head(5).to_string())
+#print(final_candidates_df.info())
 
 # this will create a file called candidates_df that will store the data frame
 with open(Path(__file__).parent / 'candidates_df', 'wb') as fh:  # notice that you need the 'wb' for the dump
     pickle.dump(final_candidates_df, fh)
 
 # dump preliminary skills
-with open(Path(__file__).parent / 'preliminary_skills', 'wb') as fh:  # notice that you need the 'wb' for the dump
+with open(Path(__file__).parent / 'academy_skills', 'wb') as fh:  # notice that you need the 'wb' for the dump
     pickle.dump(skills_list, fh)
 
 # df to csv

@@ -3,13 +3,12 @@ import pickle
 import json
 from bson.objectid import ObjectId
 from database import db_consultant, db_skills
-import skills.cleaning_skills as pre_skills
 from model import Consultant
 from bson import Binary
 
 
 # get skills
-with open(os.path.join(os.path.dirname(__file__), 'preliminary_skills'), 'rb') as fh:  # you need to use 'rb' to read
+with open(os.path.join(os.path.dirname(__file__), 'academy_skills'), 'rb') as fh:  # you need to use 'rb' to read
     skills_list = pickle.load(fh)
 
 # to load the file do this
@@ -44,7 +43,7 @@ def add_consultants():
                 dict_consultant['cv_file'] = bi
             else:
                 dict_consultant['consultant_cv'] = df.loc[index, col]
-        db_consultant.insert_one(dict_consultant)
+        db_consultant.insert(dict_consultant,check_keys=False)
         # print(dict_consultant)
 
 

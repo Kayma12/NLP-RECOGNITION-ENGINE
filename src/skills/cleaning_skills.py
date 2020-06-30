@@ -1,3 +1,7 @@
+import xlrd
+from pathlib import Path
+
+
 # get skills
 def get_skills_from_df_to_list(df):
     # lower all string in df , strip space
@@ -45,3 +49,37 @@ def get_list_from_list(list_of_list):
     except:
         TypeError
         return list_of_list
+
+
+def read_excel_skills(loc):
+    '''
+    read in file from excel
+    get the second column
+    loc = "file/doc.xlsx"
+    '''
+
+    wb = xlrd.open_workbook(loc)
+    sheet = wb.sheet_by_index(0)
+    sheet.cell_value(0, 0)
+    list_from_excel = []
+    for i in range(sheet.nrows):
+        list_from_excel.append(sheet.cell_value(i, 1))
+
+    return list_from_excel
+
+
+def academy_skills_cleaning(list):
+    new_list_no_abrv = []
+    for item in list:
+        if '(' in item:
+            item = item.split("(")
+            for word in item:
+                if ')' in word:
+                    word = word.replace(")", "")
+
+                new_list_no_abrv.append(word)
+        else:
+            new_list_no_abrv.append(item)
+    return new_list_no_abrv
+
+
