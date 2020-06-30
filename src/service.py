@@ -32,8 +32,8 @@ def add_consultants():
             if (col != 'Stream' and col != 'Candidate_cv'and col != 'cv_path'):
 
                 #print(index)
-                #print(df.loc[index, col])
-                dict_consultant['skills'][col] = int(df.loc[index, col])
+                if (df.loc[index, col] > 0):
+                    dict_consultant['skills'][col] = int(df.loc[index, col])
             elif (col == 'Stream'):
                 dict_consultant['stream'] = df.loc[index, col]
             elif (col == 'cv_path'):
@@ -110,7 +110,10 @@ def filter_skills_consultant(cons, list_skills):
     skills_consultant = cons.skills
     result = dict()
     for l in list_skills:
-        result.update({l : skills_consultant.get(l)})
+        if(skills_consultant.get(l) != None):
+            result.update({l : skills_consultant.get(l)})
+        else:
+            result.update({l: 0})
     cons.skills = result
     return cons
 
