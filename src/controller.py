@@ -1,7 +1,6 @@
 import io
 from flask import Blueprint, render_template, request, Response, make_response, send_file
 
-
 import service
 import data_plots
 
@@ -12,10 +11,13 @@ blueprint = Blueprint("controller", __name__)
 def index():
     consultants = []
     skills = service.get_all_skills()
+    consultants_in_db = service.check_if_database_is_not_empty()
+
     if request.method == 'POST':
         select = request.form.getlist('vals')
-        error_message = ""
+
         try:
+            error_message = ""
             if len(select) > 0:
                 consultants = service.query_consultants_with_skills(select)
 
@@ -25,12 +27,17 @@ def index():
                 error_message = "Please choose at least one skill!"
 
             return render_template('index.html', consultants=consultants, select=select, skills=skills,
-                                   error_message=error_message, len_consultants=len(consultants))
+                                   error_message=error_message, len_consultants=len(consultants), consultants_in_db=consultants_in_db)
 
         except:
             return "Please try again"
     else:
-        return render_template('index.html', skills=skills, len_consultants=len(consultants))
+        # if db is empty return empty index page with a comment asking to fill db with consultants else render the
+        # template with skills >> render_template('index.html', skills=skills, len_consultants=len(consultants))
+        error_message_db_empty = "There are no consultants in the database"
+
+        return render_template('index.html', skills=skills, len_consultants=len(consultants),
+                               consultants_in_db=consultants_in_db, error_message_db_empty=error_message_db_empty)
 
 
 @blueprint.route('/profile_page/<candidate_id>', methods=['POST', 'GET'])
@@ -52,6 +59,7 @@ def send_image(candidate_id):
     barchart_plot.savefig(img)
     img.seek(0)
     return send_file(img, mimetype='image/png')
+
 
 @blueprint.route('/download_link/<candidate_id>', methods=['POST', 'GET'])
 def download_link(candidate_id):

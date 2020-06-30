@@ -33,8 +33,8 @@ def add_consultants():
             if (col != 'Stream' and col != 'Candidate_cv'and col != 'cv_path'):
 
                 #print(index)
-                #print(df.loc[index, col])
-                dict_consultant['skills'][col] = int(df.loc[index, col])
+                if (df.loc[index, col] > 0):
+                    dict_consultant['skills'][col] = int(df.loc[index, col])
             elif (col == 'Stream'):
                 dict_consultant['stream'] = df.loc[index, col]
             elif (col == 'cv_path'):
@@ -111,7 +111,10 @@ def filter_skills_consultant(cons, list_skills):
     skills_consultant = cons.skills
     result = dict()
     for l in list_skills:
-        result.update({l : skills_consultant.get(l)})
+        if(skills_consultant.get(l) != None):
+            result.update({l : skills_consultant.get(l)})
+        else:
+            result.update({l: 0})
     cons.skills = result
     return cons
 
@@ -137,6 +140,10 @@ def get_binary(consultant_id):
     c = db_consultant.find_one({"_id": ObjectId(consultant_id)})
     binary = c.get('cv_file')
     return binary
+
+def check_if_database_is_not_empty():
+    cursor = db_consultant.find()
+    return cursor.count() != 0
 
 # get_consultant('Wick')
 mydoc = query_consultants_with_skills(['java', 'sql','python'])

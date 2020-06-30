@@ -3,9 +3,16 @@ from matplotlib import pyplot as plt
 import numpy as np
 matplotlib.use('Agg')
 
+font = {'family': 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif',
+        'weight' : 'bold',
+        'size'   : 22}
+
+matplotlib.rc('font', **font)
+
 def get_skills(a_dictionary):
     skill_names = []
     for skill in a_dictionary.keys():
+        skill = skill.capitalize()
         skill_names.append(skill)
     return skill_names
 
@@ -26,7 +33,7 @@ def create_bar_chart(filtered_skills):
     x = np.arange(len(skills))
     width = 0.5
 
-    fig, ax = plt.subplots(figsize=(20, 10))
+    fig, ax = plt.subplots(figsize=(35, 15))
     rect = ax.bar(x, values, width)
 
     ax.set_ylabel('Frequency')
