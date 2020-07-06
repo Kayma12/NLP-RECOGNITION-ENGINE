@@ -116,7 +116,7 @@ tbody tr:hover {
 }
 
 
-
+/*
 
 @media screen and (max-width: 992px) {
   table {
@@ -154,10 +154,10 @@ tbody tr:hover {
     content: "Date";
   }
   table tbody tr td:nth-child(2):before {
-    content: "Order ID";
+    content: "Should b skill";
   }
   table tbody tr td:nth-child(3):before {
-    content: "Name";
+    content: "Suitability";
   }
   table tbody tr td:nth-child(4):before {
     content: "Price";
@@ -203,3 +203,4 @@ tbody tr:hover {
     padding-right: 15px;
   }
 }
+*/

@@ -4,8 +4,17 @@ $(document).ready(function(){
 );
 });
 
+//$(document).ready( function () {
+//    $('#mydatatable').DataTable();
+//} );
+
+// Responsive Sizing
 $(document).ready( function () {
-    $('#mydatatable').DataTable();
+    $('#mydatatable').DataTable({
+	responsive: true,
+ "scrollX": true
+
+	});
 } );
 
 // Suitability code b
@@ -63,3 +72,6 @@ for(var num = 0; num < $('td:last-child').length; num++){
 //  lis.addEventListener("mouseout", function() {
 //    this.getElementsByTagName("a")[0].style.color = "red";
 //  });
+
+
+
