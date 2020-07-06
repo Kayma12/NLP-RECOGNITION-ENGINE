@@ -34,6 +34,8 @@ def add_consultants():
                 #print(index)
                 if (df.loc[index, col] > 0):
                     dict_consultant['skills'][col] = int(df.loc[index, col])
+                else:
+                    dict_consultant['skills'][col] = int(df.loc[index, col])
             elif (col == 'Stream'):
                 dict_consultant['stream'] = df.loc[index, col]
             elif (col == 'cv_path'):
