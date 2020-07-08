@@ -137,7 +137,7 @@ final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candida
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
-# print(final_candidates_df[['cv_path', 'Stream', 'java']].head(5).to_string())
+print(final_candidates_df[['python', 'sql', 'etl', 'java', 'attention to detail', 'Stream']].head(5).to_string())
 #print(final_candidates_df.info())
 
 # this will create a file called candidates_df that will store the data frame
@@ -150,3 +150,4 @@ with open(Path(__file__).parent / 'academy_skills', 'wb') as fh:  # notice that 
 
 # df to csv
 # final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_all_skills_30+.csv')
+#
