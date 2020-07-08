@@ -150,4 +150,3 @@ with open(Path(__file__).parent / 'academy_skills', 'wb') as fh:  # notice that 
 
 # df to csv
 # final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_all_skills_30+.csv')
-#
