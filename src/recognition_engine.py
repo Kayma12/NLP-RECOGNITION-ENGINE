@@ -48,9 +48,9 @@ def get_stream(file):
     file = file.lower()
     if "java" and "mockito" in file:
         return "Development"
-    elif "spring" and "oop" in file:
-        return "Development"
-    elif "etl" and "business intelligence" in file:
+    # elif "spring" and "oop" in file:
+    #     return "Development"
+    elif "etl" in file:
         return "Business Intelligence"
     elif "istqb" in file:
         return "Tester"
