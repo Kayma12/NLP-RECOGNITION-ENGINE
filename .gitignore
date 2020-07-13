@@ -8,3 +8,5 @@ src/__pycache__
 src/cleaning_and_reading/__pycache__
 src/skills/__pycache__
 src/candidates_df
+
+venv/
