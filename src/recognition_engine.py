@@ -114,6 +114,7 @@ def skill_cv_comparison(file):
 # Final dataframe with more than one cvs
 final_candidates_df = pd.DataFrame()
 df_stream = pd.DataFrame(columns=['Stream', 'cv_path'])
+ml_stream = pd.DataFrame(columns=['Stream', 'cv_text'], index=range(0,len(cv_file)))
 # save_cv = pd.DataFrame(columns=['Candidate_cv'])
 cv_path = []
 index = 0
@@ -121,13 +122,20 @@ while index < len(cv_file):
     a_cv_file = cv_file[index]
     cv_path.append(a_cv_file)
     cv_before_cleaning = read_in_files.read_in_doc_docx_file(a_cv_file)
+
+    # get the stream
     stream = get_stream(cv_before_cleaning.lower())
     df_stream.loc[index] = stream
-    # save cv in df
-    # save_cv.loc[index] = cv_before_cleaning
-    # cv comparison
-    cv_data = skill_cv_comparison(a_cv_file)
-    final_candidates_df = pd.concat([final_candidates_df, cv_data])
+    df_with_name_and_skills = skill_cv_comparison(a_cv_file)
+
+    # save cv and stream in df for machine learning
+    clean_cv_ml = cv_cleaning.clean_cv(cv_before_cleaning)
+
+    #ml_stream.loc[index] = index
+    ml_stream.loc[index].cv_text = clean_cv_ml
+    ml_stream.loc[index].Stream = stream
+
+    final_candidates_df = pd.concat([final_candidates_df, df_with_name_and_skills])
     index += 1
 
 df_stream['cv_path'] = cv_path
@@ -137,16 +145,20 @@ final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candida
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
 
-#print(final_candidates_df[['python', 'sql', 'etl', 'java', 'attention to detail', 'Stream']].head(5).to_string())
-#print(final_candidates_df.info())
 
-# this will create a file called candidates_df that will store the data frame
+#print(final_candidates_df[['python', 'sql', 'etl', 'java', 'attention to detail', 'Stream']].head(5).to_string())
+
+# this will create a file call candidates_df that will store the data frame
 with open(Path(__file__).parent / 'candidates_df', 'wb') as fh:  # notice that you need the 'wb' for the dump
     pickle.dump(final_candidates_df, fh)
 
 # dump preliminary skills
 with open(Path(__file__).parent / 'academy_skills', 'wb') as fh:  # notice that you need the 'wb' for the dump
     pickle.dump(skills_list, fh)
+
+# this will create a file call Machine_learning_df that will store the data frame
+with open(Path(__file__).parent / 'Machine_learning_df', 'wb') as fh:  # notice that you need the 'wb' for the dump
+    pickle.dump(ml_stream, fh)
 
 # df to csv
 # final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_all_skills_30+.csv')
