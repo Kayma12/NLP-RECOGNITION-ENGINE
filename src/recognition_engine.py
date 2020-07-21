@@ -161,4 +161,4 @@ with open(Path(__file__).parent / 'Machine_learning_df', 'wb') as fh:  # notice 
     pickle.dump(ml_stream, fh)
 
 # df to csv
-# final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_all_skills_30+.csv')
+final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_+_skills_30+.csv')
