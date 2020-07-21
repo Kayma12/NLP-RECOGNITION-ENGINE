@@ -132,7 +132,7 @@ while index < len(cv_file):
     clean_cv_ml = cv_cleaning.clean_cv(cv_before_cleaning)
 
     #ml_stream.loc[index] = index
-    ml_stream.loc[index].cv_text = clean_cv_ml
+    ml_stream.loc[index].cv_text = ''.join(clean_cv_ml)
     ml_stream.loc[index].Stream = stream
 
     final_candidates_df = pd.concat([final_candidates_df, df_with_name_and_skills])
@@ -144,7 +144,7 @@ df_stream['cv_path'] = cv_path
 final_candidates_df = final_candidates_df.join(df_stream.set_index(final_candidates_df.index))
 final_candidates_df = final_candidates_df.fillna(0).drop_duplicates()
 final_candidates_df = final_candidates_df.astype(int, errors='ignore')
-
+#print(ml_stream.head(2))
 
 #print(final_candidates_df[['python', 'sql', 'etl', 'java', 'attention to detail', 'Stream']].head(5).to_string())
 
