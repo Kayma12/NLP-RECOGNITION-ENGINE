@@ -18,33 +18,43 @@ from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.utils import to_categorical
 from sklearn.feature_extraction.text import CountVectorizer
 
-X= df_stream.drop(['Stream'], axis=1)
+# +
+X= df_stream['cv_text'].values
+
 y= df_stream['Stream'].values
+# -
 
 df_stream['cv_text'].head()
 
 X_train, X_test, y_train, y_test = train_test_split(
-X, y, test_size=0.25, random_state=1000)
+X, y, test_size=0.1, random_state=101)
 
-y
-
-vectorizer = CountVectorizer()
-vectorizer.fit(X_train)
-X_train = vectorizer.transform(X_train)
-X_test = vectorizer.transform(X_test)
-
-# ### A simple logistoic Regression Model
-
-encoder = LabelEncoder()
-encoder.fit(y)
-y = encoder.transform(y)
-
-
-y = to_categorical(y)
-
-y
+# ### A simple MultinomialNB Model
 
 df_stream.info()
+
+# +
+## from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import TfidfTransformer
+
+nb = Pipeline([('vect', CountVectorizer()),
+               ('tfidf', TfidfTransformer()),
+               ('clf', MultinomialNB()),
+              ])
+nb.fit(X_train, y_train)
+
+# #%%time
+from sklearn.metrics import classification_report, accuracy_score
+y_pred = nb.predict(X_test)
+
+print('accuracy %s' % accuracy_score(y_pred, y_test))
+# -
+
+X_train.shape
+ 
+
+# ## DEEP LEARNING KERAS
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
@@ -55,35 +65,7 @@ model.add(Dense(3, activation='softmax'))
 # Compile model
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-model.fit(x=X_train, y=y_train, epochs=100, batch_size=5, validation_data=(X_test,y_test))
-
-
-
-from sklearn.linear_model import LogisticRegression
-
-X_test
-
-
-y_test
-
-# +
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfTransformer
-
-nb = Pipeline([('vect', CountVectorizer()),
-               ('tfidf', TfidfTransformer()),
-               ('clf', MultinomialNB()),
-              ])
-nb.fit(X_train, y_train)
-
-# %%time
-from sklearn.metrics import classification_report
-y_pred = nb.predict(X_test)
-
-print('accuracy %s' % accuracy_score(y_pred, y_test))
-print(classification_report(y_test, y_pred,target_names=my_tags))
-# -
+model.fit(x=X_train, y=y_train, epochs=50, batch_size=5, validation_data=(X_test,y_test))
 
 
 
