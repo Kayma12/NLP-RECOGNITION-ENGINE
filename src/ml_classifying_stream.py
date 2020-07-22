@@ -84,9 +84,11 @@ df_stream.drop(empty_stream.index, inplace=True)
 
 # ### Keras Model 1 >> Real python
 
-X_train
+# +
+X= df_stream['cv_text'].values
 
-y_train
+y= df_stream['Stream']
+# -
 
 # Change to binary
 encoder = LabelEncoder()
@@ -94,8 +96,6 @@ encoder.fit(y)
 y = encoder.transform(y)
 
 y = to_categorical(y)
-
-X_train.shape
 
 X_train, X_test, y_train, y_test = train_test_split(
 X, y, test_size=0.2, random_state=101)
@@ -127,10 +127,6 @@ history = model.fit(X_train, y_train,
                     verbose=False,
                     validation_data=(X_test, y_test),
                     batch_size=10)
-
-X_train.shape
-
-y_train.shape
 
 loss, accuracy = model.evaluate(X_train, y_train, verbose=False)
 print("Training Accuracy: {:.4f}".format(accuracy))
@@ -293,5 +289,3 @@ print(labels[np.argmax(pred)-1])
 
 X[0]
 df_stream['Stream'].unique()
-
-
