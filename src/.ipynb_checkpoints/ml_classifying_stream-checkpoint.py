@@ -165,4 +165,133 @@ def plot_history(history):
 
 plot_history(history)
 
+# ### LSTM embedded layer
+
+from tensorflow.keras.layers import Dense, Flatten, LSTM, Dropout, Activation, Embedding, Bidirectional
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+import numpy as np
+
+vocab_size = 5000 # make the top list of words (common words)
+embedding_dim = 32
+max_length = 200
+trunc_type = 'post'
+padding_type = 'post'
+oov_tok = '<OOV>' # OOV = Out of Vocabulary
+training_portion = .7
+
+# +
+X= df_stream['cv_text']
+y= df_stream['Stream']
+
+X= X.tolist()
+y= y.tolist()
+# -
+
+# Change to binary
+encoder = LabelEncoder()
+encoder.fit(y)
+y = encoder.transform(y)
+y = to_categorical(y)
+
+# +
+train_size = int(len(X) * training_portion)
+
+train_X = X[0: train_size]
+train_y = y[0: train_size]
+
+validation_X = X[train_size:]
+validation_y = y[train_size:]
+
+# +
+tokenizer = Tokenizer(num_words = vocab_size, oov_token=oov_tok)
+tokenizer.fit_on_texts(train_X)
+word_index = tokenizer.word_index
+
+train_sequences = tokenizer.texts_to_sequences(train_X)
+train_padded = pad_sequences(train_sequences, maxlen=max_length, padding=padding_type, truncating=trunc_type)
+
+validation_sequences = (tokenizer.texts_to_sequences(validation_X))
+validation_padded = (pad_sequences(validation_sequences, maxlen=max_length, padding=padding_type, truncating=trunc_type))
+
+
+# +
+# label_tokenizer = Tokenizer()
+# label_tokenizer.fit_on_texts(y)
+
+# training_label_seq = (label_tokenizer.texts_to_sequences(train_y))
+# validation_label_seq =(label_tokenizer.texts_to_sequences(validation_y))
+
+# +
+model = Sequential()
+model.add(Embedding(vocab_size, embedding_dim))
+model.add(Dropout(0.5))
+model.add(Bidirectional(LSTM(embedding_dim)))
+model.add(Dense(8, activation='softmax'))
+
+model.summary()
+
+# +
+
+opt = Adam(lr=0.001, decay=1e-6)
+model.compile(
+    loss='categorical_crossentropy',
+    optimizer=opt,
+    metrics=['accuracy'],
+)
+# -
+
+validation_y
+
+# +
+num_epochs = 50
+model.fit(train_padded, train_y, epochs=num_epochs, validation_data=(validation_padded, validation_y), verbose=2)
+
+
+# -
+
+losses = pd.DataFrame(model.history.history)
+
+plt.figure(figsize=(12,8))
+plt.plot(model.history.history['accuracy'])
+plt.plot(model.history.history['val_accuracy'])
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Validation'], loc='upper left')
+plt.show()
+
+# "Loss"
+plt.figure(figsize=(12,8))
+plt.plot(model.history.history['loss'], 'g' )
+plt.plot(model.history.history['val_loss'], 'y')
+plt.title('Model Loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Validation'], loc='upper left')
+plt.show()
+
+df_stream.head(2)
+
+# +
+#PREDICTION
+# Making incorrect prediciton
+
+txt = [X[0]]
+seq = tokenizer.texts_to_sequences(txt)
+padded = pad_sequences(seq, maxlen=max_length)
+pred = model.predict(padded)
+labels = ['Tester', 'Business Analysis', 'Business Intelligence',
+       'Development', 'PMO', 'Risk Regulation & Compliance',
+       'Project Support Officer', 'Analyst']
+
+print(pred)
+print(np.argmax(pred))
+print(labels[np.argmax(pred)-1])
+# -
+
+X[0]
+df_stream['Stream'].unique()
+
 
