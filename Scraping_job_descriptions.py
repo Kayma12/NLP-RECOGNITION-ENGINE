@@ -14,7 +14,7 @@ import pandas as pd
 # map_of_streams_e.g. = {'Development': ['software developer'], 'Business Intelligence': ['business intelligence','data analyst']}
 
 
-map_of_streams = {
+map_of_streams_actual = {
     'Business Analysis': ['business analyst'], 'Business Intelligence': ['business intelligence', 'data analyst'],
     'Cloud Computing': ['cloud', 'azure'], 'Compliance and Risk': ['compliance and risk', 'risk analyst'],
     'Cyber Security': ['cyber security'], 'Development': ['software developer'],
@@ -45,14 +45,23 @@ def scrape_web_job_description(map_of_streams):
     driver = webdriver.Chrome(options=chrome_options, executable_path=DRIVER_PATH)
 
     driver.get('https://www.indeed.co.uk/advanced_search')
-
+    df_stream_description = pd.DataFrame()
+    print(map_of_streams.items(), '\dkfdkjhj')
     for stream, job_descriptions in map_of_streams.items():
-        print(job_descriptions, 'here >>>')
 
+        # BA, BUSINESS ANALYSIS
         for job_description in job_descriptions:
 
             # Search in the advanced page
             # Input it also in the "With all these words in the title" box
+            try:
+                search_job = driver.find_element_by_xpath('//input[@id="as_and"]')
+            except:
+                # this might need to be an if statement
+                close_popup = driver.find_element_by_id("popover-x")
+                close_popup.click()
+                close_cookie_popup = driver.find_element_by_id("onetrust-accept-btn-handler")
+                close_cookie_popup.click()
             search_job = driver.find_element_by_xpath('//input[@id="as_and"]')
             search_job.send_keys([job_description])
 
@@ -61,7 +70,7 @@ def scrape_web_job_description(map_of_streams):
             search_job.send_keys([job_description])
 
             # set display limit of 30 results per page
-            display_limit = driver.find_element_by_xpath('//select[@id="limit"]//option[@value="30"]')
+            display_limit = driver.find_element_by_xpath('//select[@id="limit"]//option[@value="10"]')
             display_limit.click()
             # sort by date
             sort_option = driver.find_element_by_xpath('//select[@id="sort"]//option[@value="date"]')
@@ -72,7 +81,7 @@ def scrape_web_job_description(map_of_streams):
                 close_cookie_popup = driver.find_element_by_id("onetrust-accept-btn-handler")
                 close_cookie_popup.click()
             except:
-                print("No cookies p[opuop")
+                print("No cookies popuop")
 
             # Save the data to a table
             # let the driver wait 3 seconds to locate the element before exiting out
@@ -109,9 +118,6 @@ def scrape_web_job_description(map_of_streams):
                         close_cookie_popup = driver.find_element_by_id("onetrust-accept-btn-handler")
                         close_cookie_popup.click()
 
-
-
-
                     # except:
                     # next_page = driver.find_element_by_xpath('//a[.//span[contains(text(),"Next")]]')
                     # next_page.click()
@@ -124,25 +130,26 @@ def scrape_web_job_description(map_of_streams):
             # we need to be able to clear search and go on to the next role
 
             # go to the clear advanced search page to insert new job description
+
             driver.get('https://www.indeed.co.uk/advanced_search')
 
-        for link in links:
-            driver.get(link)
-            jd = driver.find_element_by_xpath('//div[@id="jobDescriptionText"]').text
-            descriptions.append(jd)
+    for link in links:
+        driver.get(link)
+        jd = driver.find_element_by_xpath('//div[@id="jobDescriptionText"]').text
+        descriptions.append(jd)
 
-        df_stream_description = pd.DataFrame()
-        df_stream_description['Title'] = job_titles
-        # df_stream_description['Link']=links
-        df_stream_description['Description'] = descriptions
+    df_stream_description['Title'] = job_titles
+    # df_stream_description['Link']=links
+    df_stream_description['Description'] = descriptions
 
-        df_stream_description['Stream'] = streams
+    df_stream_description['Stream'] = streams
 
-        return df_stream_description
+    return df_stream_description
 
 
 map_of_streams_test = {
     'Business Analysis': ['business analyst'], 'Business Intelligence': ['business intelligence', 'data analyst']}
 df = scrape_web_job_description(map_of_streams_test)
-print(df.head())
+print(df.head().to_string())
+print(df.tail().to_string())
 print(df['Stream'].unique())
