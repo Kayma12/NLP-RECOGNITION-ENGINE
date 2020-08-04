@@ -163,4 +163,4 @@ with open(Path(__file__).parent / 'Machine_learning_df', 'wb') as fh:  # notice 
 # df to csv
 #final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_+_skills_30+.csv')
 
-ml_stream.to_csv(r'/Users/kaykay/Downloads/ml_df.csv')
+#ml_stream.to_csv(r'/Users/kaykay/Downloads/ml_df.csv')
