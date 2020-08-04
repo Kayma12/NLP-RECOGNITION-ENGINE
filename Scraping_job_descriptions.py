@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from cleaning_and_reading import cv_cleaning
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -19,7 +20,7 @@ map_of_streams_actual = {
     'Cloud Computing': ['cloud', 'azure'], 'Compliance and Risk': ['compliance and risk', 'risk analyst'],
     'Cyber Security': ['cyber security'], 'Development': ['software developer'],
     'Information Security Management': ['information security'], 'IT Service Management': ['technical support'],
-    'PMO': ['project manager'], 'Robotic Process Automation': ['robotic automation'],
+    'PMO': ['project manager'], 'Robotic Process Automation': ['rpa'],
     'Testing': ['software tester', 'software test', 'java test engineer']}
 
 job_titles = []
@@ -30,7 +31,7 @@ descriptions = []
 
 def scrape_web_job_description(map_of_streams):
     # specify driver path
-    DRIVER_PATH = '/Users/kaykay/Downloads/chromedriver'
+    DRIVER_PATH = '/Users/santiagomasip/Downloads/chromedriver'
 
     # stop pop-ups
     chrome_options = Options()
@@ -78,6 +79,11 @@ def scrape_web_job_description(map_of_streams):
             # Input it also in the "With these words in the title" box
             search_job = driver.find_element_by_xpath('//input[@id="as_ttl"]')
             search_job.send_keys([job_description])
+
+            # for rpa loof for robotic in the description as well
+            if(stream == 'Robotic Process Automation'):
+                search_job = driver.find_element_by_xpath('//input[@id="as_any"]')
+                search_job.send_keys(['robotic'])
 
             # set display limit of 30 results per page
             display_limit = driver.find_element_by_xpath('//select[@id="limit"]//option[@value="10"]')
@@ -146,6 +152,7 @@ def scrape_web_job_description(map_of_streams):
     for link in links:
         driver.get(link)
         jd = driver.find_element_by_xpath('//div[@id="jobDescriptionText"]').text
+        # jd = cv_cleaning.clean_cv(jd)
         descriptions.append(jd)
 
     df_stream_description['Title'] = job_titles
@@ -158,7 +165,7 @@ def scrape_web_job_description(map_of_streams):
 
 
 map_of_streams_test = {
-    'Business Analysis': ['business analyst'], 'Business Intelligence': ['business intelligence', 'data analyst']}
+    'Robotic Process Automation': ['rpa']}
 df = scrape_web_job_description(map_of_streams_test)
 print(df.head())
 print(df.tail())
