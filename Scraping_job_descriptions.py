@@ -34,19 +34,29 @@ def scrape_web_job_description(map_of_streams):
 
     # stop pop-ups
     chrome_options = Options()
-    chrome_options.add_argument("--disable-extensions")
-    chrome_options.add_argument("--disable-notifications")
-    chrome_options.add_argument("--disable-popup-blocking")
+    # chrome_options.add_argument("--disable-extensions")
+    # chrome_options.add_argument("--disable-notifications")
+    # chrome_options.add_argument("--disable-popup-blocking")
 
-    prefs = {}
-    prefs["profile.default_content_settings.cookies"] = 2
-    chrome_options.add_experimental_option("prefs", prefs)
+    chrome_options.add_argument("--disable-infobars")
+    chrome_options.add_argument("start-maximized")
+    chrome_options.add_argument("--disable-extensions")
+
+    # Pass the argument 1 to allow and 2 to block
+    chrome_options.add_experimental_option("prefs", {
+        "profile.default_content_setting_values.notifications": 1
+    })
+
+    # prefs = {}
+    # prefs["profile.default_content_settings.cookies"] = 2
+    # chrome_options.add_experimental_option("prefs", prefs)
 
     driver = webdriver.Chrome(options=chrome_options, executable_path=DRIVER_PATH)
 
     driver.get('https://www.indeed.co.uk/advanced_search')
     df_stream_description = pd.DataFrame()
-    print(map_of_streams.items(), '\dkfdkjhj')
+
+
     for stream, job_descriptions in map_of_streams.items():
 
         # BA, BUSINESS ANALYSIS
@@ -81,7 +91,7 @@ def scrape_web_job_description(map_of_streams):
                 close_cookie_popup = driver.find_element_by_id("onetrust-accept-btn-handler")
                 close_cookie_popup.click()
             except:
-                print("No cookies popuop")
+                print("No cookies popup")
 
             # Save the data to a table
             # let the driver wait 3 seconds to locate the element before exiting out
@@ -150,6 +160,6 @@ def scrape_web_job_description(map_of_streams):
 map_of_streams_test = {
     'Business Analysis': ['business analyst'], 'Business Intelligence': ['business intelligence', 'data analyst']}
 df = scrape_web_job_description(map_of_streams_test)
-print(df.head().to_string())
-print(df.tail().to_string())
+print(df.head())
+print(df.tail())
 print(df['Stream'].unique())

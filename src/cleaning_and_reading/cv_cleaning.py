@@ -22,6 +22,10 @@ def clean_cv(text):
     return text_no_stop
 
 
+def clean_tokenize_text(text):
+    pass
+
+
 # remove punctuation
 def remove_punct(text):
     punc_keep = ['-', '+', '#']  # (C)  c ')', '(',
@@ -97,3 +101,9 @@ def join_java_and_script(cv):
             cv = cv.replace(match, str(match).replace(" ", ""))
 
     return cv
+
+
+# Example
+
+text = "dnkjnslfmskn ()(dfljnfl; )"
+print(clean_cv(text))
