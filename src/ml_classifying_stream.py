@@ -8,7 +8,7 @@ import pandas as pd
 with open('Machine_learning_df', 'rb') as fh:  # you need to use 'rb' to read
     df_stream = pickle.load(fh)
 
-df_stream.head(2)
+df_stream.head(8)
 
 df_stream.describe()
 
