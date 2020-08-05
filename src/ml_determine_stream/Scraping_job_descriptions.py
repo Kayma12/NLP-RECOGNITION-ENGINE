@@ -197,8 +197,8 @@ print(df_is.info())
 # print(df1.tail())
 # print(df1['Stream'].unique())
 #
-# with open(Path(__file__).parent / 'df1_jd', 'wb') as fh:  # notice that you need the 'wb' for the dump
-#     pickle.dump(df1_mo, fh)
+with open(Path(__file__).parent / 'df1_jd', 'wb') as fh:  # notice that you need the 'wb' for the dump
+    pickle.dump(df1_mo, fh)
 
 # df2 = scrape_web_job_description(map_of_streams_actual2)
 # print(df2.info())
