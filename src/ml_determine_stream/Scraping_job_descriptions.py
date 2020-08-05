@@ -22,7 +22,7 @@ map_of_streams_3 = {
     'PMO': ['project manager']
 }
 map_of_streams_is = {
-    'Information Security Management': ['information security']
+    'Compliance and Risk': ['compliance and risk', 'risk analyst']
 }
 
 
@@ -34,7 +34,7 @@ descriptions = []
 
 def scrape_web_job_description(map_of_streams):
     # specify driver path
-    DRIVER_PATH = '/Users/kaykay/Downloads/chromedriver'
+    DRIVER_PATH = '/Users/santiagomasip/Downloads/chromedriver'
 
     # stop pop-ups
     chrome_options = Options()
@@ -202,5 +202,6 @@ print(df_is.info())
 
 # df2 = scrape_web_job_description(map_of_streams_actual2)
 # print(df2.info())
-with open('/Users/kaykay/Downloads/RecognitionEngineProject/recognitionengine/src/ml_determine_stream/df_information_security', 'wb') as fh:  # notice that you need the 'wb' for the dump
+with open('/Users/santiagomasip/PycharmProjects/recognitionengine/src/ml_determine_stream/df_compliance_and_risk', 'wb') as fh:  # notice that you need the 'wb' for the dump
     pickle.dump(df_is, fh)
+
