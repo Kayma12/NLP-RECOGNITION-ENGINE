@@ -15,14 +15,14 @@ map_of_streams_actual1 = {
     'Cyber Security': ['cyber security'], 'Development': ['software developer']}
 
 map_of_streams_actual2 = {
-    'Information Security Management': ['information security'], 'IT Service Management': ['technical support'], 'Robotic Process Automation': ['rpa'],
+    'Information Security Management' : ['information security'], 'IT Service Management': ['technical support'], 'Robotic Process Automation': ['rpa'],
     'Testing': ['software tester', 'software test', 'java test engineer']}
 
 map_of_streams_3 = {
     'PMO': ['project manager']
 }
-map_of_streams_dev = {
-    'Development': ['software developer']
+map_of_streams_is = {
+    'Information Security Management': ['information security']
 }
 
 
@@ -84,8 +84,8 @@ def scrape_web_job_description(map_of_streams):
 
             driver.implicitly_wait(3)
             # set display limit of 30 results per page
-            display_limit = driver.find_element_by_xpath('//select[@id="limit"]//option[@value="50"]')
-            display_limit.click()
+            # display_limit = driver.find_element_by_xpath('//select[@id="limit"]//option[@value="50"]')
+            # display_limit.click()
             # sort by date
             sort_option = driver.find_element_by_xpath('//select[@id="sort"]//option[@value="date"]')
             sort_option.click()
@@ -101,10 +101,10 @@ def scrape_web_job_description(map_of_streams):
             # let the driver wait 3 seconds to locate the element before exiting out
             driver.implicitly_wait(3)
 
-            for i in range(1, 40):
+            for i in range(0, 40):
 
                 job_card = driver.find_elements_by_xpath('//div[contains(@class,"clickcard")]')
-
+                print(len(job_card), 'job card: length ?>>>>>')
                 for job in job_card:
 
                     try:
@@ -130,8 +130,13 @@ def scrape_web_job_description(map_of_streams):
                 #                     alert = browser.switch_to.alert
                 #                     alert.accept()
                 except ElementClickInterceptedException:
-                    close_popup = driver.find_element_by_id("popover-x")
-                    close_popup.click()
+                    try:
+                        close_popup = driver.find_element_by_id("popover-x")
+                        close_popup.click()
+                    except:
+                        close_cookie_popup = driver.find_element_by_id("onetrust-accept-btn-handler")
+                        close_cookie_popup.click()
+
 
                 except TimeoutException:
                     print("no alert")
@@ -181,8 +186,10 @@ def scrape_web_job_description(map_of_streams):
 # df_pmo = scrape_web_job_description(map_of_streams_)
 # print(df_pmo.info())
 
-df_dev = scrape_web_job_description(map_of_streams_dev)
-print(df_dev.info())
+df_is = scrape_web_job_description(map_of_streams_is)
+print(df_is.head())
+print(df_is.tail())
+print(df_is.info())
 # map_of_streams_test = {
 #     'Robotic Process Automation': ['rpa']}
 # df1 = scrape_web_job_description(map_of_streams_actual1)
@@ -195,5 +202,5 @@ print(df_dev.info())
 
 # df2 = scrape_web_job_description(map_of_streams_actual2)
 # print(df2.info())
-with open('/Users/kaykay/Downloads/RecognitionEngineProject/recognitionengine/src/ml_determine_stream/df_dev', 'wb') as fh:  # notice that you need the 'wb' for the dump
-    pickle.dump(df_dev, fh)
+with open('/Users/kaykay/Downloads/RecognitionEngineProject/recognitionengine/src/ml_determine_stream/df_information_security', 'wb') as fh:  # notice that you need the 'wb' for the dump
+    pickle.dump(df_is, fh)
