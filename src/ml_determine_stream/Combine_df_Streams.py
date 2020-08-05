@@ -20,3 +20,6 @@ with open(os.path.join(os.path.dirname(__file__), 'df_cybersecurity'), 'rb') as 
 
 
 print(df1_with_Dev.info())
+print(df1_with_Dev['Stream'].unique(
+
+))
