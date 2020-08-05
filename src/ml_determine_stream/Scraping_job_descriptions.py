@@ -2,14 +2,29 @@ import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from pathlib import Path
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import ElementClickInterceptedException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import pickle
 
-map_of_streams_actual = {
+map_of_streams_actual1 = {
     'Business Analysis': ['business analyst'], 'Business Intelligence': ['business intelligence', 'data analyst'],
     'Cloud Computing': ['cloud', 'azure'], 'Compliance and Risk': ['compliance and risk', 'risk analyst'],
-    'Cyber Security': ['cyber security'], 'Development': ['software developer'],
-    'Information Security Management': ['information security'], 'IT Service Management': ['technical support'],
-    'PMO': ['project manager'], 'Robotic Process Automation': ['rpa'],
+    'Cyber Security': ['cyber security'], 'Development': ['software developer']}
+
+map_of_streams_actual2 = {
+    'Information Security Management': ['information security'], 'IT Service Management': ['technical support'], 'Robotic Process Automation': ['rpa'],
     'Testing': ['software tester', 'software test', 'java test engineer']}
+
+map_of_streams_3 = {
+    'PMO': ['project manager']
+}
+map_of_streams_dev = {
+    'Development': ['software developer']
+}
+
 
 job_titles = []
 links = []
@@ -19,7 +34,7 @@ descriptions = []
 
 def scrape_web_job_description(map_of_streams):
     # specify driver path
-    DRIVER_PATH = Path(__file__).parent / "chromedriver"
+    DRIVER_PATH = '/Users/kaykay/Downloads/chromedriver'
 
     # stop pop-ups
     chrome_options = Options()
@@ -34,25 +49,29 @@ def scrape_web_job_description(map_of_streams):
     })
 
     driver = webdriver.Chrome(options=chrome_options, executable_path=DRIVER_PATH)
-    print("here")
     driver.get('https://www.indeed.co.uk/advanced_search')
+    # driver.find_element_by_id("popover-x").click()
     df_stream_description = pd.DataFrame()
 
     for stream, job_descriptions in map_of_streams.items():
+        print(stream, ' >>>>>>>')
 
         for job_description in job_descriptions:
+            print(job_description, '>>>>>')
 
             # Search in the advanced page
             # Input it also in the "With all these words in the title" box
             try:
                 search_job = driver.find_element_by_xpath('//input[@id="as_and"]')
             except:
-                close_popup = driver.find_element_by_id("popover-x")
-                close_popup.click()
-                close_cookie_popup = driver.find_element_by_id("onetrust-accept-btn-handler")
-                close_cookie_popup.click()
+                print("")
+            #                 close_popup = driver.find_element_by_id("popover-x")
+            #                 close_popup.click()
+            #                 close_cookie_popup = driver.find_element_by_id("onetrust-accept-btn-handler")
+            #                 close_cookie_popup.click()
             search_job = driver.find_element_by_xpath('//input[@id="as_and"]')
             search_job.send_keys([job_description])
+            driver.implicitly_wait(3)
 
             # Input it also in the "With these words in the title" box
             search_job = driver.find_element_by_xpath('//input[@id="as_ttl"]')
@@ -63,6 +82,7 @@ def scrape_web_job_description(map_of_streams):
                 search_job = driver.find_element_by_xpath('//input[@id="as_any"]')
                 search_job.send_keys(['robotic'])
 
+            driver.implicitly_wait(3)
             # set display limit of 30 results per page
             display_limit = driver.find_element_by_xpath('//select[@id="limit"]//option[@value="50"]')
             display_limit.click()
@@ -81,7 +101,7 @@ def scrape_web_job_description(map_of_streams):
             # let the driver wait 3 seconds to locate the element before exiting out
             driver.implicitly_wait(3)
 
-            for i in range(0, 6):
+            for i in range(1, 40):
 
                 job_card = driver.find_elements_by_xpath('//div[contains(@class,"clickcard")]')
 
@@ -103,6 +123,32 @@ def scrape_web_job_description(map_of_streams):
                 try:
                     next_page = driver.find_element_by_xpath('//a[@aria-label={}]//span[@class="pn"]'.format(i + 2))
                     next_page.click()
+                #                     WebDriverWait(driver, 3).until(EC.alert_is_present(),
+                #                                                     'Timed out waiting for PA creation ' +
+                #                                                     'confirmation popup to appear.')
+
+                #                     alert = browser.switch_to.alert
+                #                     alert.accept()
+                except ElementClickInterceptedException:
+                    close_popup = driver.find_element_by_id("popover-x")
+                    close_popup.click()
+
+                except TimeoutException:
+                    print("no alert")
+
+                except NoSuchElementException:
+                    try:
+                        close_popup = driver.find_element_by_id("popover-x")
+                        close_popup.click()
+
+                    except:
+                        try:
+                            next_page = driver.find_element_by_xpath('//a[@aria-label="Next"]//span[@class="np"]')
+                            next_page.click()
+                            driver.implicitly_wait(3)
+                        except:
+                            break
+
                 except:
 
                     next_page = driver.find_element_by_xpath('//a[@aria-label="Next"]//span[@class="np"]')
@@ -111,27 +157,43 @@ def scrape_web_job_description(map_of_streams):
                 print("Page: {}".format(str(i + 2)))
 
             # we need to be able to clear search and go on to the next role
-
             # go to the clear advanced search page to insert new job description
-
             driver.get('https://www.indeed.co.uk/advanced_search')
 
     for link in links:
-        driver.get(link)
-        jd = driver.find_element_by_xpath('//div[@id="jobDescriptionText"]').text
-        # jd = cv_cleaning.clean_cv(jd)
+        try:
+
+            driver.get(link)
+            jd = driver.find_element_by_xpath('//div[@id="jobDescriptionText"]').text
+        except NoSuchElementException:
+            print(" empty website")
+            jd = ""
+
         descriptions.append(jd)
+
+    del links[:]
 
     df_stream_description['Title'] = job_titles
     df_stream_description['Description'] = descriptions
     df_stream_description['Stream'] = streams
 
     return df_stream_description
+# df_pmo = scrape_web_job_description(map_of_streams_)
+# print(df_pmo.info())
 
-
+df_dev = scrape_web_job_description(map_of_streams_dev)
+print(df_dev.info())
 # map_of_streams_test = {
 #     'Robotic Process Automation': ['rpa']}
-df = scrape_web_job_description(map_of_streams_actual)
-print(df.head())
-print(df.tail())
-print(df['Stream'].unique())
+# df1 = scrape_web_job_description(map_of_streams_actual1)
+# print(df1.head())
+# print(df1.tail())
+# print(df1['Stream'].unique())
+#
+# with open(Path(__file__).parent / 'df1_jd', 'wb') as fh:  # notice that you need the 'wb' for the dump
+#     pickle.dump(df1_mo, fh)
+
+# df2 = scrape_web_job_description(map_of_streams_actual2)
+# print(df2.info())
+with open('/Users/kaykay/Downloads/RecognitionEngineProject/recognitionengine/src/ml_determine_stream/df_dev', 'wb') as fh:  # notice that you need the 'wb' for the dump
+    pickle.dump(df_dev, fh)
