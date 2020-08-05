@@ -18,7 +18,7 @@ def clean_cv(text):
 
     text_token = tokenize(text)
     sent_tok = senetnce_tokenize(text)
-    text_no_stop = remove_stopwords(sent_tok)
+    text_no_stop = remove_stopwords(text_token)
     return text_no_stop
 
 
@@ -105,5 +105,5 @@ def join_java_and_script(cv):
 
 # Example
 
-text = "dnkjnslfmskn ()(dfljnfl; )"
+text = "dnkjnslfmskn ()(dfljnfl asd d sad ; )"
 print(clean_cv(text))
