@@ -20,3 +20,6 @@ with open(os.path.join(os.path.dirname(__file__), 'df1_jd'), 'rb') as fh:  # you
 
 
 print(df1_with_Dev.info())
+print(df1_with_Dev['Stream'].unique(
+
+))
