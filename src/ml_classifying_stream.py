@@ -5,7 +5,7 @@ import pandas as pd
 # get ml stream classification df
 # os.path.join(os.path.dirname(),
 
-with open('Machine_learning_df', 'rb') as fh:  # you need to use 'rb' to read
+with open('ml_determine_stream/Machine_learning_df', 'rb') as fh:  # you need to use 'rb' to read
     df_stream = pickle.load(fh)
 
 df_stream.head(8)

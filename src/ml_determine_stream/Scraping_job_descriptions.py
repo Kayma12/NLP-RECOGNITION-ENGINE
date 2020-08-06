@@ -21,8 +21,8 @@ map_of_streams_actual2 = {
 map_of_streams_3 = {
     'PMO': ['project manager']
 }
-map_of_streams_is = {
-    'Compliance and Risk': ['compliance and risk', 'risk analyst']
+map_of_streams_itsm = {
+    'IT Service Management': ['technical support']
 }
 
 
@@ -34,7 +34,7 @@ descriptions = []
 
 def scrape_web_job_description(map_of_streams):
     # specify driver path
-    DRIVER_PATH = '/Users/santiagomasip/Downloads/chromedriver'
+    DRIVER_PATH = '/Users/kaykay/Downloads/chromedriver'
 
     # stop pop-ups
     chrome_options = Options()
@@ -186,10 +186,9 @@ def scrape_web_job_description(map_of_streams):
 # df_pmo = scrape_web_job_description(map_of_streams_)
 # print(df_pmo.info())
 
-df_is = scrape_web_job_description(map_of_streams_is)
-print(df_is.head())
-print(df_is.tail())
-print(df_is.info())
+df_itsm = scrape_web_job_description(map_of_streams_itsm)
+
+print(df_itsm.info())
 # map_of_streams_test = {
 #     'Robotic Process Automation': ['rpa']}
 # df1 = scrape_web_job_description(map_of_streams_actual1)
@@ -197,11 +196,11 @@ print(df_is.info())
 # print(df1.tail())
 # print(df1['Stream'].unique())
 #
-with open(Path(__file__).parent / 'df1_jd', 'wb') as fh:  # notice that you need the 'wb' for the dump
-    pickle.dump(df1_mo, fh)
+with open(Path(__file__).parent / 'df_itsm', 'wb') as fh:  # notice that you need the 'wb' for the dump
+    pickle.dump(df_itsm, fh)
 
 # df2 = scrape_web_job_description(map_of_streams_actual2)
 # print(df2.info())
-with open('/Users/santiagomasip/PycharmProjects/recognitionengine/src/ml_determine_stream/df_compliance_and_risk', 'wb') as fh:  # notice that you need the 'wb' for the dump
-    pickle.dump(df_is, fh)
+# with open('/Users/santiagomasip/PycharmProjects/recognitionengine/src/ml_determine_stream/df_compliance_and_risk', 'wb') as fh:  # notice that you need the 'wb' for the dump
+#     pickle.dump(df_is, fh)
 

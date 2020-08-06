@@ -59,7 +59,7 @@ def get_stream(file):
     elif "prince 2" and "scrum master" in file:
         return "PMO"
     elif "regulation and compliance" and "kyc" in file:
-        return "Risk Regulation & Compliance"
+        return "Compliance and Risk"
     elif "completed the analysis programme" and "bcs" in file:
         return "Analyst"
     elif "completed the project support office" in file:
