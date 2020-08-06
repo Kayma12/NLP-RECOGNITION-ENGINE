@@ -78,5 +78,5 @@ print(df_dup[df_dup['Stream'] == 'Development'])
 
 
 
-with open(Path(__file__).parent / 'df_final', 'wb') as fh:  # notice that you need the 'wb' for the dump
-    pickle.dump(df, fh)
+# with open(Path(__file__).parent / 'df_final', 'wb') as fh:  # notice that you need the 'wb' for the dump
+#     pickle.dump(df, fh)

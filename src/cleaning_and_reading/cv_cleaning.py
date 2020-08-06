@@ -103,7 +103,3 @@ def join_java_and_script(cv):
     return cv
 
 
-# Example
-
-text = "dnkjnslfmskn ()(dfljnfl asd d sad ; )"
-print(clean_cv(text))
