@@ -3,6 +3,7 @@ import string
 import re
 from cleaning_and_reading import read_in_files
 from nltk.tokenize import sent_tokenize
+from nltk.tokenize.treebank import TreebankWordDetokenizer
 
 stopword = nltk.corpus.stopwords.words('english')
 
@@ -22,8 +23,14 @@ def clean_cv(text):
     return text_no_stop
 
 
-def clean_tokenize_text(text):
-    pass
+def clean_for_ml_no_tokenize(text):
+    text = text.lower()
+    text = remove_punct(text)
+    text = join_java_and_script(text)
+    text_token = tokenize(text)
+    text_no_stop = remove_stopwords(text_token)
+    clean_text_untokenize = TreebankWordDetokenizer().detokenize(text_no_stop)
+    return clean_text_untokenize
 
 
 # remove punctuation
@@ -103,3 +110,6 @@ def join_java_and_script(cv):
     return cv
 
 
+# text = 'what is a stop word and how?, kayan the blue fox'
+#
+# print(clean_for_ml_no_tokenize(text))
