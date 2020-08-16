@@ -75,9 +75,10 @@ def skill_cv_comparison(file):
     cv_before_cleaning = read_in_files.read_in_doc_docx_file(file)
     # df = get_stream(cv_before_cleaning)
     clean_cv = cv_cleaning.clean_cv(cv_before_cleaning)
-
+    
     for key in skills_dict.keys():
         clean_cv_str = ''.join(clean_cv)
+
         clean_cv_str = cv_cleaning.remove_alevel_gcse_section(clean_cv_str)
         if ' ' in key:
             find_key = re.findall('%s' % key, clean_cv_str)
@@ -121,15 +122,15 @@ index = 0
 while index < len(cv_file):
     a_cv_file = cv_file[index]
     cv_path.append(a_cv_file)
-    cv_before_cleaning = read_in_files.read_in_doc_docx_file(a_cv_file)
+    cv_before_clean = read_in_files.read_in_doc_docx_file(a_cv_file)
 
     # get the stream
-    stream = get_stream(cv_before_cleaning.lower())
+    stream = get_stream(cv_before_clean.lower())
     df_stream.loc[index] = stream
     df_with_name_and_skills = skill_cv_comparison(a_cv_file)
 
     # save cv and stream in df for machine learning
-    clean_cv_ml = cv_cleaning.clean_cv(cv_before_cleaning)
+    clean_cv_ml = cv_cleaning.clean_cv(cv_before_clean)
 
     #ml_stream.loc[index] = index
     ml_stream.loc[index].cv_text = ''.join(clean_cv_ml)
