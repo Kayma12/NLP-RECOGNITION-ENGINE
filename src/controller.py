@@ -14,6 +14,8 @@ def index():
     consultants_in_db = service.check_if_database_is_not_empty()
 
     if request.method == 'POST':
+        # If post request it returns a list of consultants based on the skills chosen
+
         select = request.form.getlist('vals')
 
         try:
@@ -32,6 +34,8 @@ def index():
         except:
             return "Please try again"
     else:
+        # get request just shows the homepage with a list of skills to choose from
+
         # if db is empty return empty index page with a comment asking to fill db with consultants else render the
         # template with skills >> render_template('index.html', skills=skills, len_consultants=len(consultants))
         error_message_db_empty = "There are no consultants in the database"

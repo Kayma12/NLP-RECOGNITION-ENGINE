@@ -45,6 +45,9 @@ def get_candidate_name(file_address):
 
 
 def get_stream(file):
+    '''
+    Using logics to specify the stream of each candidate based on the text on the cv
+    '''
     file = file.lower()
     if "java" and "mockito" in file:
         return "Development"
@@ -69,6 +72,10 @@ def get_stream(file):
 
 
 def skill_cv_comparison(file):
+    """
+    Using a cleaned cv, with sentence tokenisation and a list of skills to find the skill on the cv and count how many times
+    that skill appears
+    """
     db_skills_cleaned = pre_skills.clean_list_of_skills(db_skills())
     skills_dict = pre_skills.list_to_dict(db_skills_cleaned)
 
@@ -81,6 +88,7 @@ def skill_cv_comparison(file):
 
         clean_cv_str = cv_cleaning.remove_alevel_gcse_section(clean_cv_str)
         if ' ' in key:
+            # dealing with keys that are a conjunction of words e.g. 'good communication'
             find_key = re.findall('%s' % key, clean_cv_str)
             count_amount_of_key = len(find_key)
             skills_dict[key] = count_amount_of_key
@@ -92,6 +100,7 @@ def skill_cv_comparison(file):
     clean_cv_version = re.split("\s+", clean_cv_str)
 
     for word in clean_cv_version:
+        # look for words with numbers like css3 so it can be added to css as a skill
         if re.search(r"^\w+\d+$", word):
             if word.isdigit():
                 continue
@@ -132,7 +141,6 @@ while index < len(cv_file):
     # save cv and stream in df for machine learning
     clean_cv_ml = cv_cleaning.clean_cv(cv_before_clean)
 
-    #ml_stream.loc[index] = index
     ml_stream.loc[index].cv_text = ''.join(clean_cv_ml)
     ml_stream.loc[index].Stream = stream
 
@@ -158,8 +166,8 @@ with open(Path(__file__).parent / 'academy_skills', 'wb') as fh:  # notice that 
     pickle.dump(skills_list, fh)
 
 # this will create a file call Machine_learning_df that will store the data frame
-with open(Path(__file__).parent / 'Machine_learning_df', 'wb') as fh:  # notice that you need the 'wb' for the dump
-    pickle.dump(ml_stream, fh)
+# with open(Path(__file__).parent / 'Machine_learning_df', 'wb') as fh:  # notice that you need the 'wb' for the dump
+#     pickle.dump(ml_stream, fh)
 
 # df to csv
 #final_candidates_df.to_csv(r'/Users/kaykay/Downloads/list_of_candidates_+_skills_30+.csv')
