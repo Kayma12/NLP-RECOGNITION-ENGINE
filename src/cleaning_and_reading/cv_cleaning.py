@@ -12,22 +12,12 @@ stopword = nltk.corpus.stopwords.words('english')
 # text = read_in_files.read_in_doc_docx_file(cv)
 
 
-# def clean_cv(text):
-#     text = text.lower()
-#     text = remove_punct(text)
-#     text = join_java_and_script(text)
-#
-#     text_token = tokenize(text)
-#     sent_tok = senetnce_tokenize(text)
-#     text_no_stop = remove_stopwords(text_token)
-#     return text_no_stop
-
 def clean_cv(text):
     text = text.lower()
     text = remove_punct(text)
     text = join_java_and_script(text)
 
-    text_token = tokenize(text)
+    # text_token = tokenize(text)
     sent_tok = senetnce_tokenize(text)
     text_no_stop = remove_stopwords(sent_tok)
     return text_no_stop
